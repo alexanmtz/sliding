@@ -1,0 +1,7 @@
+.sliding-horizontal  {
+  border: 1px solid black;
+}
+
+.sliding-horizontal li {
+  width: 100px;
+}
