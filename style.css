@@ -1,7 +1,29 @@
-.sliding-horizontal  {
-  border: 1px solid black;
+body {
+  font-size: 12px;
 }
 
 .sliding-horizontal li {
   width: 100px;
+}
+
+.demo {
+  padding: 20px;
+  border: 1px solid gray;
+  margin: 10px;
+  width: 600px;
+}
+
+.demo h2 {
+  font-size: 16px;
+}
+
+#change-theme {
+  padding: 10px;
+  background-color: #D1D7F7;
+  border: 1px solid #8E94AF;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  text-align: center;
 }

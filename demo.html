@@ -1,6 +1,8 @@
 <html>
 <head>
-  <title>jflow</title>
+  <title>jQuery-UI sliding plugin</title>
+    <link rel="stylesheet" href="jquery-ui-1.8.11.custom.css" type="text/css" />
+    <link rel="stylesheet" href="jquery.ui.sliding.css" type="text/css" />
     <link rel="stylesheet" href="style.css" type="text/css" />
 
     <script type="text/javascript" src="jquery-1.5.1.min.js"></script>
@@ -18,17 +20,23 @@
 </head>
 
 <body>
+  <div id="change-theme">
+    <a href="javascript:(function(){if%20(!/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){alert('Sorry,%20due%20to%20security%20restrictions,%20this%20tool%20only%20works%20in%20Firefox');%20return%20false;%20};%20if(window.jquitr){%20jquitr.addThemeRoller();%20}%20else{%20jquitr%20=%20{};%20jquitr.s%20=%20document.createElement('script');%20jquitr.s.src%20=%20'http://jqueryui.com/themeroller/developertool/developertool.js.php';%20document.getElementsByTagName('head')[0].appendChild(jquitr.s);}%20})();">Change theme</a>   
+  </div>
   <div id="main">
-    <div class="sliding-horizontal">
-      <ul>
-        <li>item 01</li>
-        <li>item 02</li>
-        <li>item 03</li>
-        <li>item 04</li>
-        <li>item 05</li>
-        <li>item 06</li>
-        <li>item 07</li>
-      </ul>
+    <div class="demo simple-horizontal-demo">
+      <h2>Simple sliding horizontal</h2>
+      <div class="sliding-horizontal">
+        <ul>
+          <li>item 01</li>
+          <li>item 02</li>
+          <li>item 03</li>
+          <li>item 04</li>
+          <li>item 05</li>
+          <li>item 06</li>
+          <li>item 07</li>
+        </ul>
+      </div>
     </div>    
   </div>            
 </body>
