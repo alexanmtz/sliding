@@ -13,28 +13,10 @@ This plugin accepts horizontal and vertical orientation
 * Vertical and horizontal orientation
 * You can choose the item will be slided into complex markups
 
-# Changelog
-> Version 1.3.1
-  * All the descriptions in English
-  * Refactor in tests to keep more easy to maintain
-  * Changed the plugin name to sliding because jFlow already exist
-
-> Version 1.3
-	* Add active class in current active item of pagination
-	* Fix bug that don't activate it the current item when use previous and next
-
-# Where is been used?
-
-G1 at Globo.com - http://g1.globo.com/
-
-# Requirements
-
-jquery.scrollTo - http://flesler.blogspot.com/2007/10/jqueryscrollto.html
-
 # Tested
 
 * Firefox 3+ Windows / MAC / Linux
-* IE 6, 7 Windows
+* IE 7+ Windows
 
 # Issues
 
@@ -51,7 +33,7 @@ If you wish to use with ajax for a larg amount of itens, I'm working on that for
   <script type="text/javascript" src="jquery-jflow.js"></script>
   <script type="text/javascript">
      $(function(){
-        $("#vertical").jflow({
+        $("#vertical").sliding({
            mode : "vertical",
             item: "#vertical li",
             prev: "#pager button.previous",
@@ -60,70 +42,3 @@ If you wish to use with ajax for a larg amount of itens, I'm working on that for
         });
      });
   </script>
-
-# Documentation
-	
-> This is the plugin options that can be used
-
-## item
-* type: String
-* default: .jflow-item
-* description: The selector used as reference. This will be the item slided
-
-## itens
-* type: Number
-* default: 5
-* description: Itens amount that will be slided per time
-
-## inativeClass
-* type: String
-* default: .inativo
-* description: The class name applied when the item is inative 
-
-## prev
-* type: String
-* default: .jflow-prev a
-* description: Seletor used to be the handler for the prev page
-
-## next
-* type: String
-* default: .jflow-next a
-* description: Seletor used to be the handler for the prev page  
-
-## mode
-* type: String
-* default: vertical
-* description: orientation mode, this parameter accepts orizontal and vertical
-
-## speed
-* type: Number
-* default: 800
-* description: The speed in miliseconds of the slide movement
-
-## pager
-* type: Boolean or String
-* default: false
-* description: False to not use pagination or the pagination container to generate paging to navigate throught slides		
-
-#Examples
-
-## Markup  
-  
-  <div id="container">
-   	<ul>
-   		<li>item 1</li>
-   		<li>item 2</li>
-   		<li>item 3</li>
-   		<li>item 4</li>
-   	</ul>
-   </div>
-   
-## Javascript
-   <script type="text/javascript">
-	   $(function(){
-		   $('#container').sliding({
-		   	itens: 3,
-		   	mode: 'horizontal'
-		   });
-	   });
-   </script>
