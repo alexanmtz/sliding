@@ -7,7 +7,7 @@ beforeEach(function() {
     }
   });
   this.addMatchers({
-    toBeReallyVisible: function(amount) {
+    itensInsideContainer: function(amount) {
         var isIn = 0;
         var current_width = $(this.actual).width();
         var container_pos = $(this.actual).position();

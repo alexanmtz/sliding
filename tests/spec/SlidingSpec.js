@@ -43,14 +43,17 @@ describe("Sliding", function() {
       $(container).sliding({
         itens: 2
       });
-      expect($(container).get(0)).toBeReallyVisible(2);
+      expect($(container).get(0)).itensInsideContainer(2);
     });
 
     describe("navigation buttons", function(){
       it("should add next button in the target", function(){
+        var nav = $('<div id="nav"></div>');
+        nav.insertAfter(container);
         $(container).sliding({
-            'target' : '#nav-x'
+            'target' : '#nav'
         });
+        expect(nav.get(0)).toContain('a.ui-sliding-next');
       });
       it("shoud add prev button in the target", function(){
 
@@ -59,6 +62,7 @@ describe("Sliding", function() {
         $(container).sliding({
           'next' : '#nav-next-x'
         });
+
       })
     });
 
