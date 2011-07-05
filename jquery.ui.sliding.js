@@ -20,29 +20,39 @@ $.widget( "ui.sliding", {
   },
   _create: function() {
 
-     containerSize = parseInt($(this.element).find(this.options.item).css('width')) * (this.options.itens);
-     overallSize = parseInt($(this.element).find(this.options.item).css('width')) * ($(this.options.item, this.element).length);
+    $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
 
-     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
+    this.enclose();
 
-     if(this.options.mode == 'horizontal') {
-        $(this.element).find(this.options.item).css('float','left');
-        $(this.element).css({
-          'overflow' : 'hidden',
-          'width' : containerSize
-        });
-        $(this.element).children().css({
-          'width' : overallSize
-        });
+    this.createNav();
 
-      if(this.options.target) {
-        $(this.options.target).append($('<a />',{
-           'href' : '#',
-           'class' : 'ui-sliding-next'
-        }).text('next'));
-      }
+  },
+  enclose: function() {
+    containerSize = parseInt($(this.element).find(this.options.item).css('width')) * (this.options.itens);
+    overallSize = parseInt($(this.element).find(this.options.item).css('width')) * ($(this.options.item, this.element).length);
 
-     }
+    if (this.options.mode == 'horizontal') {
+     $(this.element).find(this.options.item).css('float', 'left');
+     $(this.element).css({
+       'overflow': 'hidden',
+       'width': containerSize
+     });
+     $(this.element).children().css({
+       'width': overallSize
+     });
+    }
+  },
+  createNav: function() {
+    if(this.options.target) {
+      $(this.options.target).append($('<a />',{
+         'href' : '#',
+         'class' : 'ui-sliding-next'
+      }).text('next'));
+      $(this.options.target).append($('<a />',{
+         'href' : '#',
+         'class' : 'ui-sliding-prev'
+      }).text('previous'));
+    }
   },
   destroy: function() {
 

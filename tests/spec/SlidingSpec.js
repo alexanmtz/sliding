@@ -1,5 +1,9 @@
 describe("Sliding", function() {
 
+  beforeEach(function(){
+    jQuery.fx.off = true;
+  });
+
   it("should load the instance of the plugin", function() {
     expect($.ui.sliding).toBeTruthy();
   });
@@ -47,16 +51,22 @@ describe("Sliding", function() {
     });
 
     describe("navigation buttons", function(){
-      it("should add next button in the target", function(){
+      beforeEach(function(){
         var nav = $('<div id="nav"></div>');
         nav.insertAfter(container);
+      });
+      it("should add next button in the target", function(){
+
         $(container).sliding({
             'target' : '#nav'
         });
-        expect(nav.get(0)).toContain('a.ui-sliding-next');
+        expect($('#nav').get(0)).toContain('a.ui-sliding-next');
       });
       it("shoud add prev button in the target", function(){
-
+        $(container).sliding({
+            'target' : '#nav'
+        });
+        expect($('#nav').get(0)).toContain('a.ui-sliding-prev');
       });
       it("should add add button when next is passed", function(){
         $(container).sliding({
