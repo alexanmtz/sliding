@@ -16,7 +16,7 @@ $.widget( "ui.sliding", {
     itens: 5,
     item: 'li',
     mode: 'horizontal',
-    target: '.ui-sliding-nav',
+    target: false,
     next: '.ui-sliding-next-link',
     prev: '.ui-sliding-previous-link'
   },
@@ -59,9 +59,10 @@ $.widget( "ui.sliding", {
          'href' : '#',
          'class' : self.navClasses.prev
       }).text('previous'));
+    } else {
+      $(this.options.next).addClass(self.navClasses.next);
+      $(this.options.prev).addClass(self.navClasses.prev);
     }
-    $(this.options.next).addClass(self.navClasses.next);
-    $(this.options.prev).addClass(self.navClasses.prev);
   },
   destroy: function() {
 
