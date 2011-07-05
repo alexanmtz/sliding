@@ -50,7 +50,7 @@ describe("Sliding", function() {
       expect($(container).get(0)).itensInsideContainer(2);
     });
 
-    describe("navigation buttons", function(){
+    describe("navigation buttons with the option target", function(){
       beforeEach(function(){
         var nav = $('<div id="nav"></div>');
         nav.insertAfter(container);
@@ -68,15 +68,27 @@ describe("Sliding", function() {
         });
         expect($('#nav').get(0)).toContain('a.ui-sliding-prev');
       });
+    });
+    describe("navigation buttons with the navigation buttons declared", function(){
+      beforeEach(function(){
+        var nav = $('<div id="nav-next-x"></div><div id="nav-prev-x"></div>');
+        nav.insertAfter(container);
+      });
       it("should add add button when next is passed", function(){
         $(container).sliding({
           'next' : '#nav-next-x'
         });
+        expect($('#nav-next-x').get(0)).toHaveClass('ui-sliding-next');
 
-      })
+      });
+      it("should add add button when next is passed", function(){
+        $(container).sliding({
+          'prev' : '#nav-prev-x'
+        });
+        expect($('#nav-prev-x').get(0)).toHaveClass('ui-sliding-prev');
+
+      });
     });
-
-
   });
 
 });
