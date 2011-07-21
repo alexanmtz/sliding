@@ -34,8 +34,8 @@ $.widget( "ui.sliding", {
 
   },
   enclose: function() {
-    containerSize = parseInt($(this.element).find(this.options.item).css('width')) * (this.options.itens);
-    overallSize = parseInt($(this.element).find(this.options.item).css('width')) * ($(this.options.item, this.element).length);
+    var containerSize = parseInt($(this.element).find(this.options.item).css('width')) * (this.options.itens);
+    var overallSize = parseInt($(this.element).find(this.options.item).css('width')) * ($(this.options.item, this.element).length);
 
     if(this.options.mode == 'horizontal') {
      $(this.element).find(this.options.item).css('float', 'left');
@@ -63,6 +63,16 @@ $.widget( "ui.sliding", {
       $(this.options.next).addClass(self.navClasses.next);
       $(this.options.prev).addClass(self.navClasses.prev);
     }
+
+  },
+  goToPage: function(page) {
+     var item = $(this.options.item);
+     var delta = page*this.options.itens;
+     $(this.element).clearQueue('fx').scrollTo(item.eq(delta), 800, {
+         onAfter: function(){
+
+         }
+     });
   },
   destroy: function() {
 

@@ -26,7 +26,7 @@ describe("Sliding", function() {
       'id': 'sliding-container',
       'class' : 'sliding'
      }));
-     createUnorderedList(5);
+     createUnorderedList(15);
   });
 
   describe("Sliding plugin horizontal mode", function() {
@@ -54,19 +54,19 @@ describe("Sliding", function() {
       beforeEach(function(){
         var nav = $('<div id="nav"></div>');
         nav.insertAfter(container);
+        $(container).sliding({
+          'target' : '#nav'
+        });
       });
       it("should add next button in the target", function(){
 
-        $(container).sliding({
-            'target' : '#nav'
-        });
         expect($('#nav').get(0)).toContain('a.ui-sliding-next');
+
       });
       it("shoud add prev button in the target", function(){
-        $(container).sliding({
-            'target' : '#nav'
-        });
+
         expect($('#nav').get(0)).toContain('a.ui-sliding-prev');
+
       });
     });
     describe("navigation buttons with the navigation buttons declared", function(){
@@ -81,12 +81,20 @@ describe("Sliding", function() {
         expect($('#nav-next-x').get(0)).toHaveClass('ui-sliding-next');
 
       });
-      it("should add add button when next is passed", function(){
+      it("should add button when next is passed", function(){
         $(container).sliding({
           'prev' : '#nav-prev-x'
         });
         expect($('#nav-prev-x').get(0)).toHaveClass('ui-sliding-prev');
-
+      });
+    });
+    describe("direct page navigation without handlers", function(){
+      beforeEach(function(){
+        $(container).sliding();
+      });
+      it("should go to page 2", function(){
+          $(container).sliding('goToPage', 2);
+          expect($(container).get(0)).beInRange(5,10);
       });
     });
   });
