@@ -27,7 +27,7 @@ beforeEach(function() {
         var final_pos = current_width + container_pos.left;
         $(this.actual).find('li').slice(start, end).each(function(i, el){
             var el_pos = $(this).position();
-            if (el_pos.left < final_pos) {
+            if (el_pos.left < final_pos && el_pos.left >= container_pos.left) {
                 isIn++;
             }
         });

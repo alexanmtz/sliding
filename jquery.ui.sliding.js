@@ -28,6 +28,7 @@ $.widget( "ui.sliding", {
 
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
 
+
     this.enclose();
 
     this.createNav();
@@ -67,12 +68,17 @@ $.widget( "ui.sliding", {
   },
   goToPage: function(page) {
      var item = $(this.options.item);
-     var delta = page*this.options.itens;
-     $(this.element).clearQueue('fx').scrollTo(item.eq(delta), 800, {
-         onAfter: function(){
+     var delta = (page-1)*this.options.itens;
+     var pages = Math.ceil(this.options.item.length/this.options.itens);
+     if(page <= pages) {
+         $(this.element).clearQueue('fx').scrollTo(item.eq(delta), 800);
+     } else  {
+       throw "Invalid page number";
+     }
 
-         }
-     });
+  },
+  refresh: function() {
+    this.goToPage(1);
   },
   destroy: function() {
 

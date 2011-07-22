@@ -96,6 +96,15 @@ describe("Sliding", function() {
           $(container).sliding('goToPage', 2);
           expect($(container).get(0)).beInRange(5,10);
       });
+      it("should return to start page when execute refresh", function(){
+          $(container).sliding('goToPage', 2);
+          $(container).sliding('refresh');
+          expect($(container).get(0)).beInRange(0,5);
+      });
+      it("should trow a exception when request a non existent page", function(){
+        $(container).sliding('goToPage', 20);
+        expect($(container).sliding('goToPage')).toThrow(e);
+      });
     });
   });
 
