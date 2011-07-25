@@ -18,20 +18,25 @@ $.widget( "ui.sliding", {
     mode: 'horizontal',
     target: false,
     next: '.ui-sliding-next-link',
-    prev: '.ui-sliding-previous-link'
+    prev: '.ui-sliding-previous-link',
+    disabledClass: 'ui-state-disabled',
+    speed: 1000
   },
   navClasses : {
     next: 'ui-sliding-next',
     prev: 'ui-sliding-prev'
   },
+  currentPage: 1,
+  lastPage: 1,
   _create: function() {
 
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
-
+    this.lastPage = Math.ceil($(this.element).find(this.options.item).length/this.options.itens);
 
     this.enclose();
-
     this.createNav();
+    this.refresh();
+    this.navHandlers();
 
   },
   enclose: function() {
@@ -66,19 +71,43 @@ $.widget( "ui.sliding", {
     }
 
   },
+  navHandlers: function() {
+    var self = this;
+    $('.' + self.navClasses.next).bind('click', function(e){
+      var nextPage = self.getCurrentPage() + 1;
+      self.goToPage(nextPage);
+      return false;
+    });
+  },
   goToPage: function(page) {
+     var self = this;
      var item = $(this.options.item);
      var delta = (page-1)*this.options.itens;
-     var pages = Math.ceil(this.options.item.length/this.options.itens);
-     if(page <= pages) {
-         $(this.element).clearQueue('fx').scrollTo(item.eq(delta), 800);
-     } else  {
-       throw "Invalid page number";
-     }
-
+     var pages = Math.ceil($(this.element).find(this.options.item).length/this.options.itens);
+     $(this.element).clearQueue('fx').scrollTo(item.eq(delta), this.options.speed, function() {
+       self.currentPage = page;
+       self.refresh();
+     });
   },
   refresh: function() {
+    var cur = this.getCurrentPage();
+    if(cur == 1) {
+      $('.'+this.navClasses.prev).addClass(this.options.disabledClass);
+      $('.'+this.navClasses.next).removeClass(this.options.disabledClass);
+    }
+    else if(cur == this.lastPage) {
+      $('.'+this.navClasses.next).addClass(this.options.disabledClass);
+      $('.'+this.navClasses.prev).removeClass(this.options.disabledClass);
+    } else {
+      $('.'+this.navClasses.next).removeClass(this.options.disabledClass);
+      $('.'+this.navClasses.prev).removeClass(this.options.disabledClas);
+    }
+  },
+  restart: function() {
     this.goToPage(1);
+  },
+  getCurrentPage: function() {
+    return this.currentPage;
   },
   destroy: function() {
 

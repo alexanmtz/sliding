@@ -96,15 +96,55 @@ describe("Sliding", function() {
           $(container).sliding('goToPage', 2);
           expect($(container).get(0)).beInRange(5,10);
       });
-      it("should return to start page when execute refresh", function(){
+      it("should return to start page when execute restart", function(){
           $(container).sliding('goToPage', 2);
-          $(container).sliding('refresh');
+          $(container).sliding('restart');
           expect($(container).get(0)).beInRange(0,5);
       });
-      it("should trow a exception when request a non existent page", function(){
-        $(container).sliding('goToPage', 20);
-        expect($(container).sliding('goToPage')).toThrow(e);
+      it("should get the currentPage", function(){
+        $(container).sliding('goToPage', 2);
+        var currentPage = $(container).sliding('getCurrentPage');
+        expect(currentPage).toBe(2);
       });
+    });
+    describe("next e previous page disable handler",function(){
+      beforeEach(function(){
+        var nav = $('<div id="nav"></div>');
+        nav.insertAfter(container);
+        $(container).sliding({
+          target: '#nav'
+        });
+      });
+      it("should the first page should have previous button disabled",function(){
+        expect($('.ui-sliding-prev').get(0)).toHaveClass('ui-state-disabled');
+        expect($('.ui-sliding-next').get(0)).not.toHaveClass('ui-state-disabled');
+      });
+      it("should go to last page should have next button disabled", function(){
+        $(container).sliding('goToPage', 3);
+        expect($('.ui-sliding-next').get(0)).toHaveClass('ui-state-disabled');
+        expect($('.ui-sliding-prev').get(0)).not.toHaveClass('ui-state-disabled');
+      });
+      it("should go to a middle page the prev and next should be enabled", function(){
+        $(container).sliding('goToPage', 2);
+        expect($('.ui-sliding-prev').get(0)).not.toHaveClass('ui-state-disabled');
+        expect($('.ui-sliding-next').get(0)).not.toHaveClass('ui-state-disabled');
+      });
+    });
+    describe("interact with the navigation buttons", function(){
+       beforeEach(function(){
+        var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
+        nav.insertAfter(container);
+        $(container).sliding({
+          target: '#nav',
+          next: '.test-next',
+          prev: '.test-prev'
+        });
+       });
+       it("should go to second page when click next", function(){
+         $('.test-next').trigger('click');
+         var currentPage = $(container).sliding('getCurrentPage');
+         expect(currentPage).toBe(2);
+       });
     });
   });
 
