@@ -8,6 +8,7 @@
  * @requires
  *   jquery.ui.core.js
  *   jquery.ui.widget.js
+ *   jquery.scrollTo
  */
 
 (function( $, undefined ) {

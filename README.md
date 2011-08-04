@@ -3,9 +3,7 @@
 # About the plugin ?
 
 This plugin is alternative for slider / carousel plugins out there. The reason that I develop this one is that I was needed a carousel
-that could support more complex markup structure inside the carousel container. Besides that, this is the first carousel plugin developed with TDD.
-
-This plugin accepts horizontal and vertical orientation
+that could support more complex markup structure inside the carousel container and can be horizontal or vertical, with the flexibility for use on demmand with ajax or with all content already in the markup.
 
 # Features
 
@@ -17,6 +15,10 @@ This plugin accepts horizontal and vertical orientation
 
 * Firefox 3+ Windows / MAC / Linux
 * IE 7+ Windows
+
+# Development processo
+
+This plugin it's being developed with jQuery-ui and jasmine. I create matchers in jasmine to detect that itens is really inside the container, that's way I know if it really visible.
 
 # Issues
 
@@ -30,7 +32,7 @@ If you wish to use with ajax for a larg amount of itens, I'm working on that for
 
 
 # In a nutshell:
-  <script type="text/javascript" src="jquery-jflow.js"></script>
+  <script type="text/javascript" src="jquery-sliding.js"></script>
   <script type="text/javascript">
      $(function(){
         $("#vertical").sliding({
