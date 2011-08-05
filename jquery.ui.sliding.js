@@ -60,12 +60,12 @@ $.widget( "ui.sliding", {
     if(this.options.target) {
       $(this.options.target).append($('<a />',{
          'href' : '#',
-         'class' : self.navClasses.next
-      }).text('next'));
-      $(this.options.target).append($('<a />',{
-         'href' : '#',
          'class' : self.navClasses.prev
       }).text('previous'));
+      $(this.options.target).append($('<a />',{
+         'href' : '#',
+         'class' : self.navClasses.next
+      }).text('next'));
     } else {
       $(this.options.next).addClass(self.navClasses.next);
       $(this.options.prev).addClass(self.navClasses.prev);
@@ -74,9 +74,18 @@ $.widget( "ui.sliding", {
   },
   navHandlers: function() {
     var self = this;
-    $('.' + self.navClasses.next).bind('click', function(e){
+    $('.' + self.navClasses.next).bind('click.sliding', function(e){
       var nextPage = self.getCurrentPage() + 1;
+      self._setCurrentPage(nextPage);
       self.goToPage(nextPage);
+      return false;
+    });
+    $('.' + self.navClasses.prev).bind('click.sliding', function(e){
+      var prevPage = self.getCurrentPage() - 1;
+      if (prevPage) {
+        self._setCurrentPage(prevPage);
+        self.goToPage(prevPage);
+      }
       return false;
     });
   },
@@ -86,7 +95,7 @@ $.widget( "ui.sliding", {
      var delta = (page-1)*this.options.itens;
      var pages = Math.ceil($(this.element).find(this.options.item).length/this.options.itens);
      $(this.element).clearQueue('fx').scrollTo(item.eq(delta), this.options.speed, function() {
-       self.currentPage = page;
+       self._setCurrentPage(page);
        self.refresh();
      });
   },
@@ -101,11 +110,14 @@ $.widget( "ui.sliding", {
       $('.'+this.navClasses.prev).removeClass(this.options.disabledClass);
     } else {
       $('.'+this.navClasses.next).removeClass(this.options.disabledClass);
-      $('.'+this.navClasses.prev).removeClass(this.options.disabledClas);
+      $('.'+this.navClasses.prev).removeClass(this.options.disabledClass);
     }
   },
   restart: function() {
     this.goToPage(1);
+  },
+  _setCurrentPage: function(page) {
+    this.currentPage = page;
   },
   getCurrentPage: function() {
     return this.currentPage;

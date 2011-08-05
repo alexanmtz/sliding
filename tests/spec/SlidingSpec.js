@@ -59,14 +59,10 @@ describe("Sliding", function() {
         });
       });
       it("should add next button in the target", function(){
-
         expect($('#nav').get(0)).toContain('a.ui-sliding-next');
-
       });
       it("shoud add prev button in the target", function(){
-
         expect($('#nav').get(0)).toContain('a.ui-sliding-prev');
-
       });
     });
     describe("navigation buttons with the navigation buttons declared", function(){
@@ -74,18 +70,13 @@ describe("Sliding", function() {
         var nav = $('<div id="nav-next-x"></div><div id="nav-prev-x"></div>');
         nav.insertAfter(container);
       });
-      it("should add add button when next is passed", function(){
+      it("should add button when prev and next is passed", function(){
         $(container).sliding({
+          'prev' : '#nav-prev-x',
           'next' : '#nav-next-x'
         });
-        expect($('#nav-next-x').get(0)).toHaveClass('ui-sliding-next');
-
-      });
-      it("should add button when next is passed", function(){
-        $(container).sliding({
-          'prev' : '#nav-prev-x'
-        });
         expect($('#nav-prev-x').get(0)).toHaveClass('ui-sliding-prev');
+        expect($('#nav-next-x').get(0)).toHaveClass('ui-sliding-next');
       });
     });
     describe("direct page navigation without handlers", function(){
@@ -135,7 +126,6 @@ describe("Sliding", function() {
         var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
         nav.insertAfter(container);
         $(container).sliding({
-          target: '#nav',
           next: '.test-next',
           prev: '.test-prev'
         });
@@ -144,6 +134,18 @@ describe("Sliding", function() {
          $('.test-next').trigger('click');
          var currentPage = $(container).sliding('getCurrentPage');
          expect(currentPage).toBe(2);
+       });
+       it("should go to previous page", function(){
+         $(container).sliding('goToPage', 3);
+         $('.test-prev').trigger('click');
+         var currentPage = $(container).sliding('getCurrentPage');
+         expect(currentPage).toBe(2);
+       });
+       it("should go to previous page and disabling prev when is the first page", function(){
+         $(container).sliding('goToPage', 2);
+         $('.test-prev').trigger('click');
+         var currentPage = $(container).sliding('getCurrentPage');
+         expect(currentPage).toBe(1);
        });
     });
   });
