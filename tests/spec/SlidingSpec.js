@@ -49,6 +49,16 @@ describe("Sliding", function() {
       });
       expect($(container).get(0)).itensInsideContainer(2);
     });
+    it("should show only the itens with margin and padding applied", function(){
+       $(container).find('li').css({
+         'margin' : '4px',
+         'padding' : '10px'
+       })
+       $(container).sliding({
+        itens: 2
+       });
+       expect($(container).get(0)).itensInsideContainer(2);
+    });
 
     describe("navigation buttons with the option target", function(){
       beforeEach(function(){

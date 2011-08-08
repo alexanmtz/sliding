@@ -41,8 +41,8 @@ $.widget( "ui.sliding", {
 
   },
   enclose: function() {
-    var containerSize = parseInt($(this.element).find(this.options.item).css('width')) * (this.options.itens);
-    var overallSize = parseInt($(this.element).find(this.options.item).css('width')) * ($(this.options.item, this.element).length);
+    var containerSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * (this.options.itens);
+    var overallSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * ($(this.options.item, this.element).length);
 
     if(this.options.mode == 'horizontal') {
      $(this.element).find(this.options.item).css('float', 'left');
