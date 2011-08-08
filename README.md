@@ -16,9 +16,14 @@ that could support more complex markup structure inside the carousel container a
 * Firefox 3+ Windows / MAC / Linux
 * IE 7+ Windows
 
-# Development processo
+# Version history
 
-This plugin it's being developed with jQuery-ui and jasmine. I create matchers in jasmine to detect that itens is really inside the container, that's way I know if it really visible.
+* 0.1
+  * 
+
+# Development process
+
+This plugin it's being developed with jQuery-ui and jasmine.
 
 # Issues
 
@@ -28,19 +33,16 @@ but the itens not exactly will fit at container
 * The slide works at itens already loaded, just hidding the subsequent ones. This plugin follow this UI pattern: http://developer.yahoo.com/ypatterns/selection/carousel.html
 If you wish to use with ajax for a larg amount of itens, I'm working on that for next releases.
 
-* For horizontal slider, you should use float instead display: inline and not use margin topo or padding top in itens, you could set theses properties on outermost container
-
 
 # In a nutshell:
-  <script type="text/javascript" src="jquery-sliding.js"></script>
+  <script type="text/javascript" src="jquery.ui.sliding.js"></script>
   <script type="text/javascript">
      $(function(){
         $("#vertical").sliding({
-           mode : "vertical",
-            item: "#vertical li",
+           mode : "horizontal",
+            item: "#horizontal li",
             prev: "#pager button.previous",
-            next: "#pager button.next,
-            pager: "#pager"
+            next: "#pager button.next
         });
      });
   </script>
