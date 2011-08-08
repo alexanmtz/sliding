@@ -1,3 +1,14 @@
 .ui-sliding-content li {
   list-style-type: none;
 }
+
+.ui-sliding-next, .ui-sliding-prev {
+  float: left;
+  display: block;
+  margin: 5px;
+  padding: 4px 0;
+}
+
+.ui-sliding-navigation {
+  overflow: hidden;
+}

@@ -60,12 +60,12 @@ $.widget( "ui.sliding", {
     if(this.options.target) {
       $(this.options.target).append($('<a />',{
          'href' : '#',
-         'class' : self.navClasses.prev
-      }).text('previous'));
+         'class' : self.navClasses.prev + ' ui-state-default ui-corner-all'
+      }).html('<span class="ui-icon ui-icon-carat-1-w">previous</span>'));
       $(this.options.target).append($('<a />',{
          'href' : '#',
-         'class' : self.navClasses.next
-      }).text('next'));
+         'class' : self.navClasses.next + ' ui-state-default ui-corner-all'
+      }).html('<span class="ui-icon ui-icon-carat-1-e">next</span>'));
     } else {
       $(this.options.next).addClass(self.navClasses.next);
       $(this.options.prev).addClass(self.navClasses.prev);
