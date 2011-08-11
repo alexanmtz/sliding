@@ -35,14 +35,14 @@ If you wish to use with ajax for a larg amount of itens, I'm working on that for
 
 
 # In a nutshell:
-  `<script type="text/javascript" src="jquery.ui.sliding.js"></script>
-  <script type="text/javascript">
-     $(function(){
-        $("#vertical").sliding({
-           mode : "horizontal",
-            item: "#horizontal li",
-            prev: "#pager button.previous",
-            next: "#pager button.next
+    <script type="text/javascript" src="jquery.ui.sliding.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          $("#vertical").sliding({
+            mode : "horizontal",
+              item: "#horizontal li",
+              prev: "#pager button.previous",
+              next: "#pager button.next
+            });
         });
-     });
-  </script>`
+      </script>
