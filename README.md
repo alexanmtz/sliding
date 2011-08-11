@@ -19,7 +19,7 @@ that could support more complex markup structure inside the carousel container a
 # Version history
 
 * 0.1
-  * 
+  * Basic horizontal navigation
 
 # Development process
 
