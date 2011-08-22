@@ -21,6 +21,7 @@ $.widget( "ui.sliding", {
     next: '.ui-sliding-next-link',
     prev: '.ui-sliding-previous-link',
     disabledClass: 'ui-state-disabled',
+    url: null,
     speed: 1000
   },
   navClasses : {
@@ -29,6 +30,7 @@ $.widget( "ui.sliding", {
   },
   currentPage: 1,
   lastPage: 1,
+  itensToFit: 1,
   _create: function() {
 
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
@@ -42,7 +44,10 @@ $.widget( "ui.sliding", {
   },
   enclose: function() {
     var containerSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * (this.options.itens);
-    var overallSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * ($(this.options.item, this.element).length);
+
+    this.itensToFit = this.options.url ? this.lastPage : $(this.options.item, this.element).length;
+
+    var overallSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * this.itensToFit;
 
     if(this.options.mode == 'horizontal') {
      $(this.element).find(this.options.item).css('float', 'left');
@@ -91,10 +96,21 @@ $.widget( "ui.sliding", {
   },
   goToPage: function(page) {
      var self = this;
-     var item = $(this.options.item);
      var delta = (page-1)*this.options.itens;
-     var pages = Math.ceil($(this.element).find(this.options.item).length/this.options.itens);
-     $(this.element).clearQueue('fx').scrollTo(item.eq(delta), this.options.speed, function() {
+     var pages = Math.ceil(this.itensToFit/this.options.itens);
+     if(this.options.url) {
+       $.get(this.options.url, {}, function(data){
+          $(self.element).find('ul').append(data);
+          self.makeSlide(delta, page);
+       })
+     } else {
+        self.makeSlide(delta, page);
+     }
+
+  },
+  makeSlide: function(delta, page) {
+    var self = this;
+    $(this.element).clearQueue('fx').scrollTo($(self.options.item).eq(delta), this.options.speed, function() {
        self._setCurrentPage(page);
        self.refresh();
      });
@@ -118,6 +134,12 @@ $.widget( "ui.sliding", {
   },
   _setCurrentPage: function(page) {
     this.currentPage = page;
+  },
+  setTotalPages: function(totalPages) {
+    this.lastPage = totalPages;
+  },
+  getTotalPages: function() {
+    return this.lastPage;
   },
   getCurrentPage: function() {
     return this.currentPage;

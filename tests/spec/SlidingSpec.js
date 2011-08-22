@@ -10,14 +10,20 @@ describe("Sliding", function() {
 
   var container = '#sliding-container';
 
-  function createUnorderedList(itens) {
+  function createUnorderedList(itens, toreturn) {
     var ul = $('<ul></ul>');
     var list = '';
     for(var i = 0; i < itens; i++) {
       list += '<li>item</li>';
     }
-    $('<ul></ul>').appendTo(container);
-    $(list).appendTo($(container).find('ul'));
+    if(!$(container).find('ul').length) {
+      $('<ul></ul>').appendTo(container);
+    }
+    if(toreturn) {
+      return list;
+    } else {
+      $(list).appendTo($(container).find('ul'));
+    }
 
   };
 
@@ -157,6 +163,50 @@ describe("Sliding", function() {
          var currentPage = $(container).sliding('getCurrentPage');
          expect(currentPage).toBe(1);
        });
+    });
+    describe("remote sliding", function(){
+      beforeEach(function(){
+        var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
+        nav.insertAfter(container);
+
+     });
+     it("should be able to set total pages", function(){
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test',
+          itens: 15 // one page
+        });
+        $(container).sliding('setTotalPages', 10);
+        var totalPages = $(container).sliding('getTotalPages');
+        expect($(container).sliding('getTotalPages')).toBe(10);
+     });
+     it("should next button be available when total pages it's greater than one ", function(){
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test',
+          itens: 15 // one page
+        });
+        $(container).sliding('totalPages', 4);
+        expect($('.ui-sliding-next')).not.toHaveClass('ui-state-disabled');
+     });
+     it("should make a ajax request for second page", function(){
+        var newData = createUnorderedList(30, true);
+        spyOn($, 'ajax').andCallFake(function(options){
+          options.success(newData);
+        });
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test',
+          itens: 15 // one page
+        });
+        $(container).sliding('setTotalPages', 3);
+        $('.test-next').trigger('click');
+        expect($(container).find('li').length).toBe(45);
+        expect($(container).get(0)).beInRange(15,30);
+     });
     });
   });
 
