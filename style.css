@@ -2,9 +2,14 @@ body {
   font-size: 12px;
 }
 
-.sliding-horizontal li {
+.horizontal-demo {
+  overflow: hidden;
+}
+
+.sliding-horizontal li, .sliding-horizontal-ajax li {
   width: 100px;
   border: 1px solid gray;
+  float: left;
   padding: 4px;
   margin: 3px;
 }

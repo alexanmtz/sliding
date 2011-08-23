@@ -22,12 +22,14 @@ $.widget( "ui.sliding", {
     prev: '.ui-sliding-previous-link',
     disabledClass: 'ui-state-disabled',
     url: null,
-    speed: 1000
+    speed: 1000,
+    onNextRemote: function(){}
   },
   navClasses : {
     next: 'ui-sliding-next',
     prev: 'ui-sliding-prev'
   },
+  navContext : 'body',
   currentPage: 1,
   lastPage: 1,
   itensToFit: 1,
@@ -35,6 +37,10 @@ $.widget( "ui.sliding", {
 
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
     this.lastPage = Math.ceil($(this.element).find(this.options.item).length/this.options.itens);
+
+    if(this.options.target) {
+      this.navContext = this.options.target || 'body';
+    }
 
     this.enclose();
     this.createNav();
@@ -45,12 +51,13 @@ $.widget( "ui.sliding", {
   enclose: function() {
     var containerSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * (this.options.itens);
 
-    this.itensToFit = this.options.url ? this.lastPage : $(this.options.item, this.element).length;
+    var itensAmount = $(this.options.item, this.element).length;
 
-    var overallSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * this.itensToFit;
+    this.itensToFit = this.options.url ? this.options.itens*2 : itensAmount;
+
+    var overallSize = parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * this.itensToFit;
 
     if(this.options.mode == 'horizontal') {
-     $(this.element).find(this.options.item).css('float', 'left');
      $(this.element).css({
        'overflow': 'hidden',
        'width': containerSize
@@ -72,20 +79,20 @@ $.widget( "ui.sliding", {
          'class' : self.navClasses.next + ' ui-state-default ui-corner-all'
       }).html('<span class="ui-icon ui-icon-carat-1-e">next</span>'));
     } else {
-      $(this.options.next).addClass(self.navClasses.next);
-      $(this.options.prev).addClass(self.navClasses.prev);
+      $(this.options.next).addClass(self.navClasses.next, self.navContext);
+      $(this.options.prev).addClass(self.navClasses.prev, self.navContext);
     }
 
   },
   navHandlers: function() {
     var self = this;
-    $('.' + self.navClasses.next).bind('click.sliding', function(e){
+    $('.' + self.navClasses.next, this.navContext).bind('click.sliding', function(e){
       var nextPage = self.getCurrentPage() + 1;
       self._setCurrentPage(nextPage);
       self.goToPage(nextPage);
       return false;
     });
-    $('.' + self.navClasses.prev).bind('click.sliding', function(e){
+    $('.' + self.navClasses.prev, this.navContext).bind('click.sliding', function(e){
       var prevPage = self.getCurrentPage() - 1;
       if (prevPage) {
         self._setCurrentPage(prevPage);
@@ -102,6 +109,7 @@ $.widget( "ui.sliding", {
        $.get(this.options.url, {}, function(data){
           $(self.element).find('ul').append(data);
           self.makeSlide(delta, page);
+          self.options.onNextRemote.call(self, data);
        })
      } else {
         self.makeSlide(delta, page);
@@ -118,15 +126,15 @@ $.widget( "ui.sliding", {
   refresh: function() {
     var cur = this.getCurrentPage();
     if(cur == 1) {
-      $('.'+this.navClasses.prev).addClass(this.options.disabledClass);
-      $('.'+this.navClasses.next).removeClass(this.options.disabledClass);
+      $('.'+this.navClasses.prev, this.navContext).addClass(this.options.disabledClass);
+      $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
     }
     else if(cur == this.lastPage) {
-      $('.'+this.navClasses.next).addClass(this.options.disabledClass);
-      $('.'+this.navClasses.prev).removeClass(this.options.disabledClass);
+      $('.'+this.navClasses.next, this.navContext).addClass(this.options.disabledClass);
+      $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
     } else {
-      $('.'+this.navClasses.next).removeClass(this.options.disabledClass);
-      $('.'+this.navClasses.prev).removeClass(this.options.disabledClass);
+      $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
+      $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
     }
   },
   restart: function() {

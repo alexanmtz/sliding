@@ -50,6 +50,7 @@ describe("Sliding", function() {
     });
 
     it("should show only the itens specified", function(){
+      $(container).find('li').css('float', 'left');
       $(container).sliding({
         itens: 2
       });
@@ -58,8 +59,9 @@ describe("Sliding", function() {
     it("should show only the itens with margin and padding applied", function(){
        $(container).find('li').css({
          'margin' : '4px',
-         'padding' : '10px'
-       })
+         'padding' : '10px',
+         'float' : 'left'
+       });
        $(container).sliding({
         itens: 2
        });
@@ -165,10 +167,26 @@ describe("Sliding", function() {
        });
     });
     describe("remote sliding", function(){
+      newData = '';
       beforeEach(function(){
         var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
         nav.insertAfter(container);
+        newData = createUnorderedList(30, true);
+        spyOn($, 'ajax').andCallFake(function(options){
+          options.success(newData);
+        });
 
+     });
+     it("should set the correct dimensions with the width based on total pages", function() {
+        $('ul li',container).css('width', 100);
+        $(container).sliding({
+          itens: 5,
+          mode: 'horizontal',
+          url: 'foo/example'
+        });
+        $(container).sliding('setTotalPages', 3);
+        expect($(container).css('overflow')).toBe('hidden');
+        expect($(container).find('ul').css('width')).toBe('1000px');
      });
      it("should be able to set total pages", function(){
         $(container).sliding({
@@ -192,10 +210,7 @@ describe("Sliding", function() {
         expect($('.ui-sliding-next')).not.toHaveClass('ui-state-disabled');
      });
      it("should make a ajax request for second page", function(){
-        var newData = createUnorderedList(30, true);
-        spyOn($, 'ajax').andCallFake(function(options){
-          options.success(newData);
-        });
+
         $(container).sliding({
           next: '.test-next',
           prev: '.test-prev',
@@ -206,6 +221,19 @@ describe("Sliding", function() {
         $('.test-next').trigger('click');
         expect($(container).find('li').length).toBe(45);
         expect($(container).get(0)).beInRange(15,30);
+     });
+     it("should have a successfull ajax callback", function(){
+       var callback = jasmine.createSpy();
+       $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test',
+          itens: 15, // one page,
+          onNextRemote: callback
+        });
+        $(container).sliding('setTotalPages', 3);
+        $('.test-next').trigger('click');
+        expect(callback).toHaveBeenCalledWith(newData);
      });
     });
   });
