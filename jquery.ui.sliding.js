@@ -34,6 +34,7 @@ $.widget( "ui.sliding", {
   currentPage: 1,
   pages: 0,
   elementDimensions: 0,
+  visited: [],
   _create: function() {
 
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
@@ -105,7 +106,7 @@ $.widget( "ui.sliding", {
   goToPage: function(page) {
      var self = this;
      var delta = (page-1)*this.options.itens;
-     if(this.options.url && page > this.getCurrentPage()) {
+     if(this.options.url && !this.pageCached(delta)) {
        $.get(this.options.url, {}, function(data){
           $(self.element).find('ul').append(data);
           self.makeSlide(delta, page);
@@ -114,6 +115,9 @@ $.widget( "ui.sliding", {
      } else {
         self.makeSlide(delta, page);
      }
+  },
+  pageCached: function(index) {
+    return this.element.find(this.options.item).eq(index).length;
   },
   makeSlide: function(delta, page) {
     var self = this;

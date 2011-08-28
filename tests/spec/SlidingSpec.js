@@ -260,6 +260,19 @@ describe("Sliding", function() {
         $('.test-prev').trigger('click');
         expect($.ajax.callCount).toEqual(1);
      });
+     it("should not make ajax request when is going to previous page and go to next page again", function(){
+       $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test2',
+          itens: 15
+        });
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('goToPage', 2);
+        $(container).sliding('goToPage', 1);
+        $('.test-next').trigger('click');
+        expect($.ajax.callCount).toEqual(1);
+     });
     });
   });
 
