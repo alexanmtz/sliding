@@ -22,6 +22,7 @@ $.widget( "ui.sliding", {
     prev: '.ui-sliding-previous-link',
     disabledClass: 'ui-state-disabled',
     url: null,
+    totalPages: 0,
     speed: 1000,
     onNextRemote: function(){}
   },
@@ -31,43 +32,45 @@ $.widget( "ui.sliding", {
   },
   navContext : 'body',
   currentPage: 1,
-  lastPage: 1,
-  itensToFit: 1,
+  pages: 0,
+  elementDimensions: 0,
   _create: function() {
 
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
-    this.lastPage = Math.ceil($(this.element).find(this.options.item).length/this.options.itens);
+
+    this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
+    this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.itens));
 
     if(this.options.target) {
       this.navContext = this.options.target || 'body';
     }
 
-    this.enclose();
-    this.createNav();
+    this._enclose();
+    this._createNav();
     this.refresh();
-    this.navHandlers();
+    this._navHandlers();
 
   },
-  enclose: function() {
-    var containerSize = parseInt($(this.element).find(this.options.item).outerWidth(true)) * (this.options.itens);
-
-    var itensAmount = $(this.options.item, this.element).length;
-
-    this.itensToFit = this.options.url ? this.options.itens*2 : itensAmount;
-
-    var overallSize = parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * this.itensToFit;
-
-    if(this.options.mode == 'horizontal') {
-     $(this.element).css({
-       'overflow': 'hidden',
-       'width': containerSize
-     });
-     $(this.element).children().css({
-       'width': overallSize
-     });
+  _enclose: function() {
+    this._setContainerSize();
+    this._setOverallSize(this.element.find(this.options.item).length);
+  },
+  _setContainerSize: function() {
+    var containerSize = parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * (this.options.itens);
+    if (this.options.mode == 'horizontal') {
+      $(this.element).css({
+        'overflow': 'hidden',
+        'width': containerSize
+      });
     }
   },
-  createNav: function() {
+  _setOverallSize: function(itens) {
+    overallSize =  parseInt(this.elementDimensions * itens);
+    $(this.element).children().css({
+       'width': overallSize
+     });
+  },
+  _createNav: function() {
     var self = this;
     if(this.options.target) {
       $(this.options.target).append($('<a />',{
@@ -84,18 +87,16 @@ $.widget( "ui.sliding", {
     }
 
   },
-  navHandlers: function() {
+  _navHandlers: function() {
     var self = this;
     $('.' + self.navClasses.next, this.navContext).bind('click.sliding', function(e){
       var nextPage = self.getCurrentPage() + 1;
-      self._setCurrentPage(nextPage);
       self.goToPage(nextPage);
       return false;
     });
     $('.' + self.navClasses.prev, this.navContext).bind('click.sliding', function(e){
       var prevPage = self.getCurrentPage() - 1;
       if (prevPage) {
-        self._setCurrentPage(prevPage);
         self.goToPage(prevPage);
       }
       return false;
@@ -104,8 +105,7 @@ $.widget( "ui.sliding", {
   goToPage: function(page) {
      var self = this;
      var delta = (page-1)*this.options.itens;
-     var pages = Math.ceil(this.itensToFit/this.options.itens);
-     if(this.options.url) {
+     if(this.options.url && page > this.getCurrentPage()) {
        $.get(this.options.url, {}, function(data){
           $(self.element).find('ul').append(data);
           self.makeSlide(delta, page);
@@ -114,11 +114,10 @@ $.widget( "ui.sliding", {
      } else {
         self.makeSlide(delta, page);
      }
-
   },
   makeSlide: function(delta, page) {
     var self = this;
-    $(this.element).clearQueue('fx').scrollTo($(self.options.item).eq(delta), this.options.speed, function() {
+    $(this.element).clearQueue('fx').scrollTo($(self.element).find(self.options.item).eq(delta), this.options.speed, function() {
        self._setCurrentPage(page);
        self.refresh();
      });
@@ -129,7 +128,7 @@ $.widget( "ui.sliding", {
       $('.'+this.navClasses.prev, this.navContext).addClass(this.options.disabledClass);
       $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
     }
-    else if(cur == this.lastPage) {
+    else if(cur == this.pages) {
       $('.'+this.navClasses.next, this.navContext).addClass(this.options.disabledClass);
       $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
     } else {
@@ -144,10 +143,13 @@ $.widget( "ui.sliding", {
     this.currentPage = page;
   },
   setTotalPages: function(totalPages) {
-    this.lastPage = totalPages;
+    this.pages = totalPages;
+    if(this.options.url) {
+      this._setOverallSize(totalPages*this.options.itens);
+    }
   },
   getTotalPages: function() {
-    return this.lastPage;
+    return this.pages;
   },
   getCurrentPage: function() {
     return this.currentPage;

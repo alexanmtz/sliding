@@ -186,7 +186,20 @@ describe("Sliding", function() {
         });
         $(container).sliding('setTotalPages', 3);
         expect($(container).css('overflow')).toBe('hidden');
-        expect($(container).find('ul').css('width')).toBe('1000px');
+        expect($(container).css('width')).toBe('500px');
+        expect($(container).find('ul').css('width')).toBe('1500px');
+     });
+     it("should set the correct dimensions with last page not complete", function() {
+        $('ul li',container).css('width', 100);
+        $(container).sliding({
+          itens: 7,
+          mode: 'horizontal',
+          url: 'foo/example'
+        });
+        $(container).sliding('setTotalPages', 3);
+        expect($(container).css('overflow')).toBe('hidden');
+        expect($(container).css('width')).toBe('700px');
+        expect($(container).find('ul').css('width')).toBe('2100px');
      });
      it("should be able to set total pages", function(){
         $(container).sliding({
@@ -234,6 +247,18 @@ describe("Sliding", function() {
         $(container).sliding('setTotalPages', 3);
         $('.test-next').trigger('click');
         expect(callback).toHaveBeenCalledWith(newData);
+     });
+     it("should not make ajax request when is going to previous page", function(){
+       $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test2',
+          itens: 15
+        });
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('goToPage', 2);
+        $('.test-prev').trigger('click');
+        expect($.ajax.callCount).toEqual(1);
      });
     });
   });
