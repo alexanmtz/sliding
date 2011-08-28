@@ -22,10 +22,19 @@
         $('.sliding-horizontal-ajax').sliding({
             mode: 'horizontal',
             itens: 3,
-            url: 'ajax.php',
-            target: '.ui-sliding-ajax-navigation'
+            url: 'json.php',
+            target: '.ui-sliding-ajax-navigation',
+            beforeRemoteSlide: function() {
+              $(this).append('<div class="loading">loading</div>');
+            },
+            onAppend: function(json) {
+              $(this).sliding('setTotalPages', json.pages);
+              return json.content;
+            },
+            onNextRemote: function() {
+              $(this).find('.loading').remove();
+            }
         });
-        $('.sliding-horizontal-ajax').sliding('setTotalPages', 3);
     });
     </script>
 </head>

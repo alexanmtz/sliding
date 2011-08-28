@@ -273,7 +273,52 @@ describe("Sliding", function() {
         $('.test-next').trigger('click');
         expect($.ajax.callCount).toEqual(1);
      });
+     it("should call loading callback when request starts", function() {
+        callback = jasmine.createSpy();
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test2',
+          beforeRemoteSlide: callback,
+          itens: 15
+        });
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('goToPage', 2);
+        expect(callback).toHaveBeenCalled();
+     });
     });
+    describe("differents formats of response in remote sliding in page info came in the response", function(){
+       var newData = {};
+       beforeEach(function(){
+          newData = '';
+          var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
+          nav.insertAfter(container);
+          newData = [{
+            pages: 3,
+            content: '<li>jsonitem 04</li><li>jsonitem 05</li><li>jsonitem 06</li>'
+          }];
+          spyOn($, 'ajax').andCallFake(function(options){
+            options.success(newData);
+          });
+       });
+       it("should have a callback to modify the response", function(){
+         var callback = jasmine.createSpy().andCallFake(function(data){
+            return data.content;
+         });
+         $(container).sliding({
+            next: '.test-next',
+            prev: '.test-prev',
+            url: 'foo/test2',
+            onAppend: callback,
+            itens: 15
+          });
+          $(container).sliding('setTotalPages', 2);
+          $(container).sliding('goToPage', 2);
+          expect(callback).toHaveBeenCalledWith(newData[0]);
+
+       });
+     });
+
   });
 
 });

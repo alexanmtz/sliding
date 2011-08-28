@@ -24,6 +24,8 @@ $.widget( "ui.sliding", {
     url: null,
     totalPages: 0,
     speed: 1000,
+    beforeRemoteSlide: function(){},
+    onAppend: function(){},
     onNextRemote: function(){}
   },
   navClasses : {
@@ -36,7 +38,7 @@ $.widget( "ui.sliding", {
   elementDimensions: 0,
   visited: [],
   _create: function() {
-
+    var self = this;
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
 
     this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
@@ -107,11 +109,21 @@ $.widget( "ui.sliding", {
      var self = this;
      var delta = (page-1)*this.options.itens;
      if(this.options.url && !this.pageCached(delta)) {
-       $.get(this.options.url, {}, function(data){
-          $(self.element).find('ul').append(data);
-          self.makeSlide(delta, page);
-          self.options.onNextRemote.call(self, data);
-       })
+       self.options.beforeRemoteSlide.call(self.element);
+       $.ajax({
+         context: self,
+         url: this.options.url+'?'+ new Date().getTime(),
+         type: "GET",
+         success: function(data) {
+            var content = self.options.onAppend.call(self.element,data[0]) || data;
+            $(self.element).find('ul').append(content);
+            self.makeSlide(delta, page);
+            self.options.onNextRemote.call(self.element, data);
+         },
+         error: function(x) {
+           console.debug('ajax error: ', x);
+         }
+       });
      } else {
         self.makeSlide(delta, page);
      }
