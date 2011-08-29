@@ -138,6 +138,13 @@ describe("Sliding", function() {
         expect($('.ui-sliding-prev').get(0)).not.toHaveClass('ui-state-disabled');
         expect($('.ui-sliding-next').get(0)).not.toHaveClass('ui-state-disabled');
       });
+      it("should really disbale next buttom when its last page", function(){
+        spyOn($.ui.sliding.prototype, 'goToPage');
+        $(container).sliding('goToPage', 3);
+        $('.ui-sliding-next').click();
+        expect($.ui.sliding.prototype.goToPage.callCount).toBe(2);
+
+      });
     });
     describe("interact with the navigation buttons", function(){
        beforeEach(function(){

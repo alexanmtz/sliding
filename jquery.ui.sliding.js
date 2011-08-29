@@ -24,6 +24,7 @@ $.widget( "ui.sliding", {
     url: null,
     totalPages: 0,
     speed: 1000,
+    easing: 'easeInOutQuad',
     beforeRemoteSlide: function(){},
     onAppend: function(){},
     onNextRemote: function(){}
@@ -92,12 +93,20 @@ $.widget( "ui.sliding", {
   },
   _navHandlers: function() {
     var self = this;
-    $('.' + self.navClasses.next, this.navContext).bind('click.sliding', function(e){
+    this._bindNext();
+    this._bindPrev();
+  },
+  _bindNext: function() {
+    var self = this;
+    $('.' + self.navClasses.next, this.navContext).unbind('click.sliding').bind('click.sliding', function(e){
       var nextPage = self.getCurrentPage() + 1;
       self.goToPage(nextPage);
       return false;
     });
-    $('.' + self.navClasses.prev, this.navContext).bind('click.sliding', function(e){
+  },
+  _bindPrev: function() {
+    var self = this;
+    $('.' + self.navClasses.prev, this.navContext).unbind('click.sliding').bind('click.sliding', function(e){
       var prevPage = self.getCurrentPage() - 1;
       if (prevPage) {
         self.goToPage(prevPage);
@@ -121,36 +130,54 @@ $.widget( "ui.sliding", {
             self.options.onNextRemote.call(self.element, data);
          },
          error: function(x) {
-           console.debug('ajax error: ', x);
+           if (window.console) {
+             console.debug('ajax error: ', x.statusText);
+           } else {
+             alert('ajax error: ', x.statusText);
+           }
          }
        });
      } else {
         self.makeSlide(delta, page);
      }
   },
-  pageCached: function(index) {
-    return this.element.find(this.options.item).eq(index).length;
-  },
   makeSlide: function(delta, page) {
     var self = this;
-    $(this.element).clearQueue('fx').scrollTo($(self.element).find(self.options.item).eq(delta), this.options.speed, function() {
-       self._setCurrentPage(page);
-       self.refresh();
-     });
+    var targetElement = $(self.element).find(self.options.item).eq(delta);
+    $(this.element).clearQueue('fx').scrollTo(targetElement, self.options.speed,
+      {
+        'easing': self.options.easing,
+        'onAfter': function(){
+          self._setCurrentPage(page);
+          self.refresh();
+        }
+      });
+  },
+  pageCached: function(index) {
+    return this.element.find(this.options.item).eq(index).length;
   },
   refresh: function() {
     var cur = this.getCurrentPage();
     if(cur == 1) {
       $('.'+this.navClasses.prev, this.navContext).addClass(this.options.disabledClass);
       $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
+      this._unbindHandler($('.'+this.navClasses.prev));
     }
     else if(cur == this.pages) {
       $('.'+this.navClasses.next, this.navContext).addClass(this.options.disabledClass);
       $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
+      this._unbindHandler($('.'+this.navClasses.next));
     } else {
       $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
       $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
+      this._bindNext();
+      this._bindPrev();
     }
+  },
+  _unbindHandler: function(target) {
+     target.unbind('click.sliding').bind('click.sliding',function(){
+        return false;
+     });
   },
   restart: function() {
     this.goToPage(1);
