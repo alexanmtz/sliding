@@ -14,7 +14,7 @@
 (function( $, undefined ) {
 $.widget( "ui.sliding", {
   options: {
-    itens: 5,
+    items: 5,
     item: 'li',
     mode: 'horizontal',
     target: false,
@@ -22,7 +22,6 @@ $.widget( "ui.sliding", {
     prev: '.ui-sliding-previous-link',
     disabledClass: 'ui-state-disabled',
     url: null,
-    totalPages: 0,
     speed: 1000,
     easing: 'easeInOutQuad',
     params: {},
@@ -44,7 +43,7 @@ $.widget( "ui.sliding", {
     $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
 
     this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
-    this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.itens));
+    this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
 
     if(this.options.target) {
       this.navContext = this.options.target || 'body';
@@ -61,7 +60,7 @@ $.widget( "ui.sliding", {
     this._setOverallSize(this.element.find(this.options.item).length);
   },
   _setContainerSize: function() {
-    var containerSize = parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * (this.options.itens);
+    var containerSize = parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * (this.options.items);
     if (this.options.mode == 'horizontal') {
       $(this.element).css({
         'overflow': 'hidden',
@@ -69,8 +68,8 @@ $.widget( "ui.sliding", {
       });
     }
   },
-  _setOverallSize: function(itens) {
-    overallSize =  parseInt(this.elementDimensions * itens);
+  _setOverallSize: function(items) {
+    overallSize =  parseInt(this.elementDimensions * items);
     $(this.element).children().css({
        'width': overallSize
      });
@@ -117,7 +116,7 @@ $.widget( "ui.sliding", {
   },
   goToPage: function(page) {
      var self = this;
-     var delta = (page-1)*this.options.itens;
+     var delta = (page-1)*this.options.items;
      var urlFormat = this.getUrlFormat();
      if(this.options.url && !this.pageCached(delta)) {
        self.options.beforeRemoteSlide.call(self.element);
@@ -201,7 +200,7 @@ $.widget( "ui.sliding", {
   setTotalPages: function(totalPages) {
     this.pages = totalPages;
     if(this.options.url) {
-      this._setOverallSize(totalPages*this.options.itens);
+      this._setOverallSize(totalPages*this.options.items);
     }
   },
   getTotalPages: function() {

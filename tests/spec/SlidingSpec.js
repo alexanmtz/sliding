@@ -10,10 +10,10 @@ describe("Sliding", function() {
 
   var container = '#sliding-container';
 
-  function createUnorderedList(itens, toreturn) {
+  function createUnorderedList(items, toreturn) {
     var ul = $('<ul></ul>');
     var list = '';
-    for(var i = 0; i < itens; i++) {
+    for(var i = 0; i < items; i++) {
       list += '<li>item</li>';
     }
     if(!$(container).find('ul').length) {
@@ -40,32 +40,32 @@ describe("Sliding", function() {
       $('ul li',container).css('width', 100);
     });
 
-    it("should set width based on itens", function(){
+    it("should set width based on items", function(){
       $(container).sliding({
-        itens: 3,
+        items: 3,
         mode: 'horizontal'
       });
       expect($(container).css('overflow')).toBe('hidden');
       expect($(container).css('width')).toBe('300px');
     });
 
-    it("should show only the itens specified", function(){
+    it("should show only the items specified", function(){
       $(container).find('li').css('float', 'left');
       $(container).sliding({
-        itens: 2
+        items: 2
       });
-      expect($(container).get(0)).itensInsideContainer(2);
+      expect($(container).get(0)).itemsInsideContainer(2);
     });
-    it("should show only the itens with margin and padding applied", function(){
+    it("should show only the items with margin and padding applied", function(){
        $(container).find('li').css({
          'margin' : '4px',
          'padding' : '10px',
          'float' : 'left'
        });
        $(container).sliding({
-        itens: 2
+        items: 2
        });
-       expect($(container).get(0)).itensInsideContainer(2);
+       expect($(container).get(0)).itemsInsideContainer(2);
     });
 
     describe("navigation buttons with the option target", function(){
@@ -187,7 +187,7 @@ describe("Sliding", function() {
      it("should set the correct dimensions with the width based on total pages", function() {
         $('ul li',container).css('width', 100);
         $(container).sliding({
-          itens: 5,
+          items: 5,
           mode: 'horizontal',
           url: 'foo/example'
         });
@@ -199,7 +199,7 @@ describe("Sliding", function() {
      it("should set the correct dimensions with last page not complete", function() {
         $('ul li',container).css('width', 100);
         $(container).sliding({
-          itens: 7,
+          items: 7,
           mode: 'horizontal',
           url: 'foo/example'
         });
@@ -213,7 +213,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test',
-          itens: 15 // one page
+          items: 15 // one page
         });
         $(container).sliding('setTotalPages', 10);
         var totalPages = $(container).sliding('getTotalPages');
@@ -224,7 +224,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test',
-          itens: 15 // one page
+          items: 15 // one page
         });
         $(container).sliding('totalPages', 4);
         expect($('.ui-sliding-next')).not.toHaveClass('ui-state-disabled');
@@ -235,7 +235,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test',
-          itens: 15 // one page
+          items: 15 // one page
         });
         $(container).sliding('setTotalPages', 3);
         $('.test-next').trigger('click');
@@ -248,7 +248,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test',
-          itens: 15, // one page,
+          items: 15, // one page,
           onNextRemote: callback
         });
         $(container).sliding('setTotalPages', 3);
@@ -260,7 +260,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test2',
-          itens: 15
+          items: 15
         });
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('goToPage', 2);
@@ -272,7 +272,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test2',
-          itens: 15
+          items: 15
         });
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('goToPage', 2);
@@ -287,7 +287,7 @@ describe("Sliding", function() {
           prev: '.test-prev',
           url: 'foo/test2',
           beforeRemoteSlide: callback,
-          itens: 15
+          items: 15
         });
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('goToPage', 2);
@@ -298,7 +298,7 @@ describe("Sliding", function() {
          next: '.test-next',
          prev: '.test-prev',
          url: 'foo/test3',
-         itens: 15,
+         items: 15,
          params: {
            'extra' : 'foo'
          }
@@ -312,7 +312,7 @@ describe("Sliding", function() {
          prev: '.test-prev',
          url: 'foo/test',
          urlFormat: '{url}/page/{page}',
-         itens: 15
+         items: 15
        });
        $(container).sliding('goToPage', 2);
        expect($(container).sliding('getUrlFormat')).toEqual('foo/test/page/2');
@@ -341,7 +341,7 @@ describe("Sliding", function() {
             prev: '.test-prev',
             url: 'foo/test2',
             onAppend: callback,
-            itens: 15
+            items: 15
           });
           $(container).sliding('setTotalPages', 2);
           $(container).sliding('goToPage', 2);

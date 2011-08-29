@@ -7,7 +7,7 @@ beforeEach(function() {
     }
   });
   this.addMatchers({
-    itensInsideContainer: function(amount) {
+    itemsInsideContainer: function(amount) {
         var isIn = 0;
         var current_width = $(this.actual).width();
         var container_pos = $(this.actual).position();
@@ -31,7 +31,7 @@ beforeEach(function() {
                 isIn++;
             }
         });
-        return isIn == $(this.actual).sliding('option','itens');
+        return isIn == $(this.actual).sliding('option','items');
     }
   });
 });
