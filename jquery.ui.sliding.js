@@ -33,7 +33,10 @@ $.widget( "ui.sliding", {
     next: 'ui-sliding-next',
     prev: 'ui-sliding-prev'
   },
-  navContext : 'body',
+  navElements : {
+    next: null,
+    prev: null
+  },
   currentPage: 1,
   pages: 0,
   elementDimensions: 0,
@@ -44,10 +47,6 @@ $.widget( "ui.sliding", {
 
     this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
     this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
-
-    if(this.options.target) {
-      this.navContext = this.options.target || 'body';
-    }
 
     this._enclose();
     this._createNav();
@@ -76,18 +75,24 @@ $.widget( "ui.sliding", {
   },
   _createNav: function() {
     var self = this;
-    if(this.options.target) {
-      $(this.options.target).append($('<a />',{
-         'href' : '#',
-         'class' : self.navClasses.prev + ' ui-state-default ui-corner-all'
+    if (this.options.target) {
+      $(this.options.target).append($('<a />', {
+        'href': '#',
+        'class': self.navClasses.prev + ' ui-state-default ui-corner-all'
       }).html('<span class="ui-icon ui-icon-carat-1-w">previous</span>'));
-      $(this.options.target).append($('<a />',{
-         'href' : '#',
-         'class' : self.navClasses.next + ' ui-state-default ui-corner-all'
+      $(this.options.target).append($('<a />', {
+        'href': '#',
+        'class': self.navClasses.next + ' ui-state-default ui-corner-all'
       }).html('<span class="ui-icon ui-icon-carat-1-e">next</span>'));
-    } else {
-      $(this.options.next).addClass(self.navClasses.next, self.navContext);
-      $(this.options.prev).addClass(self.navClasses.prev, self.navContext);
+      this.navElements.next = $('.' + this.navClasses.next, this.options.target);
+      this.navElements.prev = $('.' + this.navClasses.prev, this.options.target);
+    }
+    else {
+      this.navElements.next = $(this.options.next);
+      this.navElements.prev = $(this.options.prev);
+
+      $(this.options.next).addClass(self.navClasses.next);
+      $(this.options.prev).addClass(self.navClasses.prev);
     }
 
   },
@@ -98,7 +103,7 @@ $.widget( "ui.sliding", {
   },
   _bindNext: function() {
     var self = this;
-    $('.' + self.navClasses.next, this.navContext).unbind('click.sliding').bind('click.sliding', function(e){
+    $(self.navElements.next).unbind('click.sliding').bind('click.sliding', function(e){
       var nextPage = self.getCurrentPage() + 1;
       self.goToPage(nextPage);
       return false;
@@ -106,7 +111,7 @@ $.widget( "ui.sliding", {
   },
   _bindPrev: function() {
     var self = this;
-    $('.' + self.navClasses.prev, this.navContext).unbind('click.sliding').bind('click.sliding', function(e){
+    $(self.navElements.prev).unbind('click.sliding').bind('click.sliding', function(e){
       var prevPage = self.getCurrentPage() - 1;
       if (prevPage) {
         self.goToPage(prevPage);
@@ -117,6 +122,7 @@ $.widget( "ui.sliding", {
   goToPage: function(page) {
      var self = this;
      var delta = (page-1)*this.options.items;
+     self._setCurrentPage(page);
      var urlFormat = this.getUrlFormat();
      if(this.options.url && !this.pageCached(delta)) {
        self.options.beforeRemoteSlide.call(self.element);
@@ -150,7 +156,6 @@ $.widget( "ui.sliding", {
       {
         'easing': self.options.easing,
         'onAfter': function(){
-          self._setCurrentPage(page);
           self.refresh();
         }
       });
@@ -171,17 +176,17 @@ $.widget( "ui.sliding", {
   refresh: function() {
     var cur = this.getCurrentPage();
     if(cur == 1) {
-      $('.'+this.navClasses.prev, this.navContext).addClass(this.options.disabledClass);
-      $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
-      this._unbindHandler($('.'+this.navClasses.prev));
+      $(this.navElements.prev).addClass(this.options.disabledClass);
+      $(this.navElements.next).removeClass(this.options.disabledClass);
+      this._unbindHandler($(this.navElements.prev));
     }
     else if(cur == this.pages) {
-      $('.'+this.navClasses.next, this.navContext).addClass(this.options.disabledClass);
-      $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
-      this._unbindHandler($('.'+this.navClasses.next));
+      $(this.navElements.next).addClass(this.options.disabledClass);
+      $(this.navElements.prev).removeClass(this.options.disabledClass);
+      this._unbindHandler($(this.navElements.next));
     } else {
-      $('.'+this.navClasses.next, this.navContext).removeClass(this.options.disabledClass);
-      $('.'+this.navClasses.prev, this.navContext).removeClass(this.options.disabledClass);
+      $(this.navElements.next).removeClass(this.options.disabledClass);
+      $(this.navElements.prev).removeClass(this.options.disabledClass);
       this._bindNext();
       this._bindPrev();
     }
