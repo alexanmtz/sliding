@@ -25,6 +25,7 @@ $.widget( "ui.sliding", {
     totalPages: 0,
     speed: 1000,
     easing: 'easeInOutQuad',
+    params: {},
     beforeRemoteSlide: function(){},
     onAppend: function(){},
     onNextRemote: function(){}
@@ -117,12 +118,14 @@ $.widget( "ui.sliding", {
   goToPage: function(page) {
      var self = this;
      var delta = (page-1)*this.options.itens;
+     var urlFormat = this.getUrlFormat();
      if(this.options.url && !this.pageCached(delta)) {
        self.options.beforeRemoteSlide.call(self.element);
        $.ajax({
          context: self,
-         url: this.options.url+'?'+ new Date().getTime(),
+         url: urlFormat,
          type: "GET",
+         data: this.options.params,
          success: function(data) {
             var content = self.options.onAppend.call(self.element,data[0]) || data;
             $(self.element).find('ul').append(content);
@@ -152,6 +155,16 @@ $.widget( "ui.sliding", {
           self.refresh();
         }
       });
+  },
+  getUrlFormat: function() {
+    if(!this.options.urlFormat) {
+      return this.options.url;
+    } else {
+      var urlFormat = this.options.urlFormat;
+      var newUrl = urlFormat.replace("{url}", this.options.url);
+      newUrl = newUrl.replace("{page}", this.getCurrentPage());
+      return newUrl;
+    }
   },
   pageCached: function(index) {
     return this.element.find(this.options.item).eq(index).length;

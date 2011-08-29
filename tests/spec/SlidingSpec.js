@@ -293,6 +293,30 @@ describe("Sliding", function() {
         $(container).sliding('goToPage', 2);
         expect(callback).toHaveBeenCalled();
      });
+     it("should pass extra parameters in the request", function(){
+       $(container).sliding({
+         next: '.test-next',
+         prev: '.test-prev',
+         url: 'foo/test3',
+         itens: 15,
+         params: {
+           'extra' : 'foo'
+         }
+       });
+       $(container).sliding('goToPage', 2);
+       expect($.ajax.mostRecentCall.args[0]["data"]).toEqual({'extra':'foo'});
+     });
+     it("should setup the url format passing the page", function(){
+       $(container).sliding({
+         next: '.test-next',
+         prev: '.test-prev',
+         url: 'foo/test',
+         urlFormat: '{url}/page/{page}',
+         itens: 15
+       });
+       $(container).sliding('goToPage', 2);
+       expect($(container).sliding('getUrlFormat')).toEqual('foo/test/page/2');
+     });
     });
     describe("differents formats of response in remote sliding in page info came in the response", function(){
        var newData = {};
