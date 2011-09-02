@@ -281,12 +281,25 @@ describe("Sliding", function() {
         expect($.ajax.callCount).toEqual(1);
      });
      it("should call loading callback when request starts", function() {
-        callback = jasmine.createSpy();
+        var callback = jasmine.createSpy();
         $(container).sliding({
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test2',
           beforeRemoteSlide: callback,
+          items: 15
+        });
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('goToPage', 2);
+        expect(callback).toHaveBeenCalled();
+     });
+     it("should call onFinish sliding when slide ends", function(){
+        var callback = jasmine.createSpy();
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test2',
+          onFinishSliding: callback,
           items: 15
         });
         $(container).sliding('setTotalPages', 3);
