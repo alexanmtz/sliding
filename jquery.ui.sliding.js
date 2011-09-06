@@ -3,7 +3,7 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno (http://blog.alexandremagno.net)
- * @version 0.1
+ * @version 1.0.1
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
@@ -107,6 +107,7 @@ $.widget( "ui.sliding", {
   _bindNext: function() {
     var self = this;
     self.nextButton.unbind('click.sliding').bind('click.sliding', function(e){
+      self._unbindNext();
       var nextPage = self.getCurrentPage() + 1;
       self.goToPage(nextPage);
       return false;
@@ -115,6 +116,7 @@ $.widget( "ui.sliding", {
   _bindPrev: function() {
     var self = this;
     self.prevButton.unbind('click.sliding').bind('click.sliding', function(e){
+      self._unbindNext();
       var prevPage = self.getCurrentPage() - 1;
       if (prevPage) {
         self.goToPage(prevPage);
@@ -127,30 +129,32 @@ $.widget( "ui.sliding", {
      var delta = (page-1)*this.options.items;
      self._setCurrentPage(page);
      var urlFormat = this.getUrlFormat();
-     if(this.options.url && !this.pageCached(delta)) {
-       self.options.beforeRemoteSlide.call(self.element);
-       $.ajax({
-         context: self,
-         url: urlFormat,
-         type: "GET",
-         data: this.options.params,
-         success: function(data) {
-            var content = self.options.onAppend.call(self.element,data[0]) || data;
-            $(self.element).children(self.options.wrapper).append(content);
-            self.makeSlide(delta, page);
-            self.options.onNextRemote.call(self.element, data);
-         },
-         error: function(x) {
-           if (window.console) {
-             console.debug('ajax error: ', x.statusText);
-           } else {
-             alert('ajax error: ', x.statusText);
-           }
+     if (this.options.url && !this.pageCached(delta)) {
+     self.options.beforeRemoteSlide.call(self.element);
+     $.ajax({
+       context: self,
+       url: urlFormat,
+       type: "GET",
+       data: this.options.params,
+       success: function(data){
+         var content = self.options.onAppend.call(self.element, data[0]) || data;
+         $(self.element).children(self.options.wrapper).append(content);
+         self.makeSlide(delta, page);
+         self.options.onNextRemote.call(self.element, data);
+       },
+       error: function(x){
+         if (window.console) {
+           console.debug('ajax error: ', x.statusText);
          }
-       });
-     } else {
-        self.makeSlide(delta, page);
-     }
+         else {
+           alert('ajax error: ', x.statusText);
+         }
+       }
+     });
+   }
+   else {
+     self.makeSlide(delta, page);
+   }
   },
   makeSlide: function(delta, page) {
     var self = this;
