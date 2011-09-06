@@ -3,7 +3,7 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno (http://blog.alexandremagno.net)
- * @version 1.0.1
+ * @version 1.0.2
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
@@ -183,13 +183,13 @@ $.widget( "ui.sliding", {
   },
   refresh: function() {
     var cur = this.getCurrentPage();
+    var totalPages = this.getTotalPages();
     if(cur == 1) {
       this.prevButton.addClass(this.options.disabledClass);
       this.nextButton.removeClass(this.options.disabledClass);
       this._unbindPrev();
       this._bindNext();
-    }
-    else if(cur == this.pages) {
+    } else if(cur == this.pages) {
       this.nextButton.addClass(this.options.disabledClass);
       this.prevButton.removeClass(this.options.disabledClass);
       this._unbindNext();
@@ -199,6 +199,12 @@ $.widget( "ui.sliding", {
       this.prevButton.removeClass(this.options.disabledClass);
       this._bindPrev();
       this._bindNext();
+    }
+    if(cur == 1 && totalPages == 1){
+      this.prevButton.addClass(this.options.disabledClass);
+      this.nextButton.addClass(this.options.disabledClass);
+      this._unbindNext();
+      this._unbindPrev();
     }
   },
   _unbindNext: function() {

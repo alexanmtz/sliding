@@ -29,7 +29,7 @@
               $(this).append('<div class="loading">loading</div>');
             },
             onAppend: function(json) {
-              $(this).sliding('setTotalPages', json.pages);
+              $(this).sliding('setTotalPages', parseInt(json.pages, 10));
               return json.content;
             },
             onNextRemote: function() {

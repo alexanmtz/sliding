@@ -238,6 +238,7 @@ describe("Sliding", function() {
           items: 15 // one page
         });
         $(container).sliding('setTotalPages', 3);
+        $(container).sliding('refresh');
         $('.test-next').trigger('click');
         expect($(container).find('li').length).toBe(45);
         expect($(container).get(0)).beInRange(15,30);
@@ -252,6 +253,7 @@ describe("Sliding", function() {
           onNextRemote: callback
         });
         $(container).sliding('setTotalPages', 3);
+        $(container).sliding('refresh');
         $('.test-next').trigger('click');
         expect(callback).toHaveBeenCalledWith(newData);
      });
