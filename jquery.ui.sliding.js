@@ -26,10 +26,7 @@ $.widget( "ui.sliding", {
     speed: 1000,
     easing: 'easeInOutQuad',
     params: {},
-    onFinishSliding: function(){},
-    beforeRemoteSlide: function(){},
-    onAppend: function(){},
-    onNextRemote: function(){}
+    onAppend: function(){}
   },
   navClasses : {
     next: 'ui-sliding-next',
@@ -130,7 +127,9 @@ $.widget( "ui.sliding", {
      self._setCurrentPage(page);
      var urlFormat = this.getUrlFormat();
      if (this.options.url && !this.pageCached(delta)) {
-     self.options.beforeRemoteSlide.call(self.element);
+     self._trigger('before',{
+       target: self.element
+     });
      $.ajax({
        context: self,
        url: urlFormat,
@@ -140,7 +139,11 @@ $.widget( "ui.sliding", {
          var content = self.options.onAppend.call(self.element, data[0]) || data;
          $(self.element).children(self.options.wrapper).append(content);
          self.makeSlide(delta, page);
-         self.options.onNextRemote.call(self.element, data);
+         self._trigger('nextRemote',{
+           'target': self.element
+         },{
+           'data': data
+         });
        },
        error: function(x){
          if (window.console) {
@@ -164,7 +167,9 @@ $.widget( "ui.sliding", {
         'easing': self.options.easing,
         'onAfter': function(){
           self.refresh();
-          self.options.onFinishSliding.call(self.element, targetElement);
+          self._trigger('finish', {target: self.element}, {
+            'currentElement' : targetElement
+          });
         }
       });
   },

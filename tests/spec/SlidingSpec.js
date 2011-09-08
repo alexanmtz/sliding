@@ -250,12 +250,14 @@ describe("Sliding", function() {
           prev: '.test-prev',
           url: 'foo/test',
           items: 15, // one page,
-          onNextRemote: callback
+          nextRemote: callback
         });
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('refresh');
         $('.test-next').trigger('click');
-        expect(callback).toHaveBeenCalledWith(newData);
+        expect(callback).toHaveBeenCalledWith(jasmine.any(Object), {
+          data: newData
+        });
      });
      it("should not make ajax request when is going to previous page", function(){
        $(container).sliding({
@@ -288,7 +290,7 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test2',
-          beforeRemoteSlide: callback,
+          before: callback,
           items: 15
         });
         $(container).sliding('setTotalPages', 3);
@@ -301,11 +303,12 @@ describe("Sliding", function() {
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test2',
-          onFinishSliding: callback,
+          finish: callback,
           items: 15
         });
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('goToPage', 2);
+        var currentElement = $(container).find('li').eq(16);
         expect(callback).toHaveBeenCalled();
      });
      it("should pass extra parameters in the request", function(){
