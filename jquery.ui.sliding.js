@@ -3,7 +3,7 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno (http://blog.alexandremagno.net)
- * @version 1.0.2
+ * @version 1.1.1
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
@@ -46,10 +46,10 @@ $.widget( "ui.sliding", {
     this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
 
     this.enclose();
+    $(this.element).scrollTo(0);
     this._createNav();
     this._navHandlers();
     this.refresh();
-
   },
   getSlidingOffset: function() {
     return parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * (this.options.items)

@@ -60,7 +60,8 @@ describe("Sliding", function() {
        $(container).find('li').css({
          'margin' : '4px',
          'padding' : '10px',
-         'float' : 'left'
+         'float' : 'left',
+         'listStyleType' : 'none'
        });
        $(container).sliding({
         items: 2

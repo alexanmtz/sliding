@@ -19,7 +19,10 @@ This plugin is a UI Slide components
 * jquery.easing
 
 # Version history
-
+* 1.1.1
+  * bugfix - making slide for first page when initialize the plugin for browser refresh issues in firefox
+* 1.1
+  * using the jQuery UI callback standard to use callback as events
 * 1.0.2
   * bugfix - the plugin not handle next page when is just one page
 * 1.0.1
