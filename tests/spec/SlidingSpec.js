@@ -68,7 +68,34 @@ describe("Sliding", function() {
        });
        expect($(container).get(0)).itemsInsideContainer(2);
     });
+    describe("destroy method", function(){
+      beforeEach(function(){
+       var nav = $('<div id="nav"></div>');
+        nav.insertAfter(container);
+        $(container).sliding({
+          'target' : '#nav'
+        });
+        $(container).sliding('destroy');
+      });
+      it("should remove ui classes", function(){
+        expect($(container).get(0)).not.toHaveClass('ui-widget');
+        expect($(container).get(0)).not.toHaveClass('ui-widget-content');
+        expect($(container).get(0)).not.toHaveClass('ui-corner-all');
+        expect($(container).get(0)).not.toHaveClass('ui-sliding-content');
+      });
+      it("should set the container size to initial state", function(){
+        var originalWidth = $(container).css('width');
+        expect($(container).css('overflow')).not.toBe('hidden');
+        expect($(container).css('width')).toBe(originalWidth);
+      });
+      it("should the content back to original width", function(){
+        expect($(container).css('width')).not.toBe('1500px');
+      });
+      it("should remove disabled classes in the ui", function(){
+        expect($('#nav').html()).toBe('');
+      });
 
+    });
     describe("navigation buttons with the option target", function(){
       beforeEach(function(){
         var nav = $('<div id="nav"></div>');
@@ -231,7 +258,6 @@ describe("Sliding", function() {
         expect($('.ui-sliding-next')).not.toHaveClass('ui-state-disabled');
      });
      it("should make a ajax request for second page", function(){
-
         $(container).sliding({
           next: '.test-next',
           prev: '.test-prev',
@@ -305,6 +331,20 @@ describe("Sliding", function() {
           prev: '.test-prev',
           url: 'foo/test2',
           finish: callback,
+          items: 15
+        });
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('goToPage', 2);
+        var currentElement = $(container).find('li').eq(16);
+        expect(callback).toHaveBeenCalled();
+     });
+     it("should call create callback", function(){
+        var callback = jasmine.createSpy();
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test2',
+          create: callback,
           items: 15
         });
         $(container).sliding('setTotalPages', 3);

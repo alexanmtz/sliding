@@ -37,6 +37,10 @@
               $(this).find('.loading').remove();
             }
         });
+        $('.destroy').bind('click', function(){
+          $('.sliding-horizontal').sliding('destroy');
+          return false;
+        });
     });
     </script>
 </head>
@@ -61,6 +65,7 @@
         </ul>
       </div>
       <div class="ui-sliding-navigation"></div>
+      <a href="#" class="destroy">destroy!</a>
     </div>
     <div class="demo horizontal-demo">
       <h2>Simple sliding horizontal with ajax</h2>

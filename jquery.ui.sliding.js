@@ -32,6 +32,7 @@ $.widget( "ui.sliding", {
     next: 'ui-sliding-next',
     prev: 'ui-sliding-prev'
   },
+  uiClasses: 'ui-widget ui-widget-content ui-corner-all ui-sliding-content',
   nextButton: null,
   prevButton: null,
   currentPage: 1,
@@ -40,8 +41,8 @@ $.widget( "ui.sliding", {
   visited: [],
   _create: function() {
     var self = this;
-    $(this.element).addClass('ui-widget ui-widget-content ui-corner-all ui-sliding-content');
 
+    $(this.element).addClass(this.uiClasses);
     this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
     this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
 
@@ -244,7 +245,26 @@ $.widget( "ui.sliding", {
     return this.getCurrentPage() == this.getTotalPages();
   },
   destroy: function() {
-
+    var width = this.originalWidth;
+    $(this.element).removeClass(this.uiClasses);
+    $(this.element).removeAttr('style');
+    $(this.element).children(this.options.wrapper).removeAttr('style');
+    this.disable();
+    this._setCurrentPage(1);
+    this.setTotalPages(1);
+    this.nextButton.removeClass(this.options.disabledClass);
+    this.prevButton.removeClass(this.options.disabledClass);
+    if(this.options.target) {
+      $(this.options.target).empty();
+    }
+  },
+  disable: function() {
+    this._unbindNext();
+    this._unbindPrev();
+  },
+  enable: function() {
+    this._bindNext();
+    this._bindPrev();
   }
 });
 })(jQuery);
