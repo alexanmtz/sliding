@@ -192,7 +192,7 @@ $.widget( "ui.sliding", {
     return this.element.find(this.options.item).eq(index).length;
   },
   _adjustHeight: function(newHeight) {
-  	$(this.element).find(this.options.item).animate({
+  	$(this.element).animate({
   		'height' : newHeight
   	});
   },

@@ -418,7 +418,20 @@ describe("Sliding", function() {
 				autoHeight: true
 			});
 			$(container).sliding('goToPage', 15);
-			expect(list_item.eq(0).height()).toEqual(90);
+			expect($(container).height()).toEqual(90);
+		});
+		it("should adjust when go to last page and then adjust again", function(){
+			list_item = $(container).find('li');
+			list_item.css('height', 150);
+			$(container).find('li:last').css('height', 90);
+			$(container).sliding({
+				items : 1,
+				autoHeight: true
+			});
+			$(container).sliding('goToPage', 15);
+			expect($(container).height()).toEqual(90);
+			$(container).sliding('goToPage', 14);
+			expect($(container).height()).toEqual(150);
 		});
      });
 
