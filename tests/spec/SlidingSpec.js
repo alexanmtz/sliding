@@ -408,6 +408,19 @@ describe("Sliding", function() {
 
        });
      });
+     describe("Automatic height adjustment", function(){
+		it("should adjust to new height when go to last page", function(){
+			list_item = $(container).find('li');
+			list_item.css('height', 150);
+			$(container).find('li:last').css('height', 90);
+			$(container).sliding({
+				items : 1,
+				autoHeight: true
+			});
+			$(container).sliding('goToPage', 15);
+			expect(list_item.eq(0).height()).toEqual(90);
+		});
+     });
 
   });
 

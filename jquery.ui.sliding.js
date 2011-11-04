@@ -25,6 +25,7 @@ $.widget( "ui.sliding", {
     url: null,
     speed: 1000,
     easing: 'easeInOutQuad',
+    autoHeight: false,
     params: {},
     onAppend: function(){}
   },
@@ -168,6 +169,9 @@ $.widget( "ui.sliding", {
         'easing': self.options.easing,
         'onAfter': function(){
           self.refresh();
+          if(self.options.autoHeight) {
+          	self._adjustHeight($(targetElement).height());
+          }
           self._trigger('finish', {target: self.element}, {
             'currentElement' : targetElement
           });
@@ -186,6 +190,11 @@ $.widget( "ui.sliding", {
   },
   pageCached: function(index) {
     return this.element.find(this.options.item).eq(index).length;
+  },
+  _adjustHeight: function(newHeight) {
+  	$(this.element).find(this.options.item).animate({
+  		'height' : newHeight
+  	});
   },
   refresh: function() {
     var cur = this.getCurrentPage();
