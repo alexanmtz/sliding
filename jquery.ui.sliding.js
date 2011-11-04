@@ -195,6 +195,9 @@ $.widget( "ui.sliding", {
   	$(this.element).animate({
   		'height' : newHeight
   	});
+  	this._trigger('resize', {target: self.element},{
+  		'newHeight' : newHeight
+  	});
   },
   refresh: function() {
     var cur = this.getCurrentPage();

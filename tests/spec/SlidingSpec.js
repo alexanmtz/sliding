@@ -433,6 +433,19 @@ describe("Sliding", function() {
 			$(container).sliding('goToPage', 14);
 			expect($(container).height()).toEqual(150);
 		});
+		it("should call a callback with the height adjusted", function(){
+			var callback = jasmine.createSpy();
+			list_item = $(container).find('li');
+			list_item.css('height', 150);
+			$(container).find('li:last').css('height', 90);
+			$(container).sliding({
+				items : 1,
+				autoHeight: true,
+				resize: callback
+			});
+			$(container).sliding('goToPage', 15);
+			expect(callback).toHaveBeenCalledWith(jasmine.any(Object),{ 'newHeight' : 90 });
+		});
      });
 
   });
