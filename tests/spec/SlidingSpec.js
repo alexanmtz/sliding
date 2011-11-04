@@ -433,6 +433,19 @@ describe("Sliding", function() {
 			$(container).sliding('goToPage', 14);
 			expect($(container).height()).toEqual(150);
 		});
+		it("should adjust when items is greater than one", function() {
+			list_item = $(container).find('li');
+			list_item.css('height', 150);
+			$(container).find('li:eq(10)').css('height', 90);
+			$(container).sliding({
+				items : 5,
+				autoHeight: true
+			});
+			$(container).sliding('goToPage', 3);
+			expect($(container).height()).toEqual(90);
+			$(container).sliding('goToPage', 2);
+			expect($(container).height()).toEqual(150);
+		});
 		it("should call a callback with the height adjusted", function(){
 			var callback = jasmine.createSpy();
 			list_item = $(container).find('li');
