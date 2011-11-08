@@ -42,13 +42,10 @@ $.widget( "ui.sliding", {
   visited: [],
   _create: function() {
     var self = this;
-
     $(this.element).addClass(this.uiClasses);
     this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
     this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
-
     this.enclose();
-    $(this.element).scrollTo(0);
     this._createNav();
     this._navHandlers();
     this.refresh();
@@ -70,7 +67,8 @@ $.widget( "ui.sliding", {
     }
   },
   _setOverallSize: function(items) {
-    overallSize =  parseInt(this.elementDimensions * items);
+    
+    var overallSize =  parseInt(this.elementDimensions * items);
     $(this.element).children(this.options.wrapper).css({
        'width': overallSize
      });
