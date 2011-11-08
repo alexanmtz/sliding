@@ -13,11 +13,13 @@
     <script type="text/javascript">
     $(function(){
         //mode horizontal
-        $('.sliding-horizontal').sliding({
+        var slidingHorizontal = $('.sliding-horizontal');
+        slidingHorizontal.sliding({
             mode: 'horizontal',
             items: 3,
             target: '.ui-sliding-navigation'
         });
+        slidingHorizontal.sliding('restart');
 
         //mode horizontal with ajax
         var slideHorizontalAjax = $('.sliding-horizontal-ajax');
@@ -55,13 +57,13 @@
       <h2>Simple sliding horizontal</h2>
       <div class="sliding-horizontal">
         <ul>
-          <li>item 01</li>
-          <li>item 02</li>
-          <li>item 03</li>
-          <li>item 04</li>
-          <li>item 05</li>
-          <li>item 06</li>
-          <li>item 07</li>
+          <li><img src="thumbs/image01.jpg" /></li>
+          <li><img src="thumbs/image02.jpg" /></li>
+          <li><img src="thumbs/image03.jpg" /></li>
+          <li><img src="thumbs/image04.jpg" /></li>
+          <li><img src="thumbs/image05.jpg" /></li>
+          <li><img src="thumbs/image06.jpg" /></li>
+          <li><img src="thumbs/image02.jpg" /></li>
         </ul>
       </div>
       <div class="ui-sliding-navigation"></div>
@@ -71,9 +73,9 @@
       <h2>Simple sliding horizontal with ajax</h2>
       <div class="sliding-horizontal-ajax">
         <ul>
-          <li>item 01</li>
-          <li>item 02</li>
-          <li>item 03</li>
+          <li><img src="thumbs/image01.jpg" /></li>
+          <li><img src="thumbs/image02.jpg" /></li>
+          <li><img src="thumbs/image03.jpg" /></li>
         </ul>
       </div>
       <div class="ui-sliding-ajax-navigation"></div>
