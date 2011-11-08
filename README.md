@@ -2,23 +2,45 @@
 
 # About the plugin ?
 
-This plugin is a UI Slide components
+This plugin is a slide component developed to attempt complex carousels, that can be smart enough to load dynamic content as needed.
+
+# Documentation and usage
+
+You can see a full reference and examples at [Sliding Github page](http://alexanmtz.github.com/sliding/ "The github page of the complete documentation")
+
+# In a nutshell:
+    <script type="text/javascript" src="jquery.sliding.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          $("#cool-list").sliding({
+              item: "li",
+              prev: ".previous",
+              next: ".next"
+            });
+        });
+      </script>
 
 # Features
 
-* Pagination
-* Ajax request on demand
+* You can create carousel with simple lists in one line
+* Using jQuery UI theme support
+* Using the jQuery UI API for tracking events for fully customization
+* Request new elements for carousels just when needed, caching the current viewed pages
+* Option for auto height adjustment, this way is possible to have different content sizes
 
 # Tested
 
 * Firefox 3+ Windows / MAC / Linux
 * IE 7+ Windows
+* A complete test suite using [Jasmine](http://pivotal.github.com/jasmine/ "Jasmine - BDD for your javascript")
 
 # Dependencies
-* jquery.scrollTo
-* jquery.easing
+* jquery.scrollTo - [Ariel Flesler](http://flesler.blogspot.com/2007/10/jqueryscrollto.html "ScrollTo jQuery plugin")
+* jquery.easing - [http://gsgd.co.uk/sandbox/jquery/easing/](http://gsgd.co.uk/sandbox/jquery/easing/ "jQuery easing plugin")
 
 # Version history
+* 1.4
+  * Firefox bug when reload the page
 * 1.1.1
   * bugfix - making slide for first page when initialize the plugin for browser refresh issues in firefox
 * 1.1
@@ -32,54 +54,3 @@ This plugin is a UI Slide components
   * ajax sliding
   * custom url formats
   * easing
-  
-
-# In a nutshell:
-    <script type="text/javascript" src="jquery.ui.sliding.js"></script>
-    <script type="text/javascript">
-      $(function(){
-          $("#vertical").sliding({
-              item: "#horizontal li",
-              prev: "#pager button.previous",
-              next: "#pager button.next
-            });
-        });
-      </script>
-
-# Options
-* items (default: 5)
-  > The items per page that will be displayed
-* item (default: 'li')
-  > The item that will be the slider
-* target (default: false)
-  > The element target for pagination. When you specify the plugin will create navigation buttons automatically
-* next: (default: '.ui-sliding-next-link')
-  > The element that will be used for next buttom
-* prev: (default: '.ui-sliding-prev-link')
-  > The element that will be used for previous buttom
-* disabledClass (default: 'ui-state-disabled')
-  > The class added when next and previous button are inactive
-* url (default: none)
-  > When you specify a url the plugin will work with ajax
-* speed (default: 1000)
-  > The speed of the page transition
-* easing (default: 'easeInOutQuad')
-  > The easing method for animation
-* params
-  > Extra params to be passed in the ajax request
-* beforeRemoteSlide
-  > A callback to be called before the pagination
-* onAppend
-  > A callback triggered before the content is added, you receive the data returned as parameters and you can modify the content just return new content in this function
-* onNextRemote
-  > A callback to be called when finished the request and when the new page is displayed
-    
-# Methods
-* restart
-> Back to plugin initial state
-* goToPage (page)
-> Go to any page defined in page parameter
-* refresh
-> Check the button states to disable when needed
-* setTotalPages (pages)
-> Set the current total pages. This method has to be called with remote sliding

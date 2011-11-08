@@ -3,12 +3,13 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno (http://blog.alexandremagno.net)
- * @version 1.1.1
+ * @version 1.4
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
  *   jquery.ui.widget.js
  *   jquery.scrollTo
+ *   jquery.easing
  */
 
 (function( $, undefined ) {
