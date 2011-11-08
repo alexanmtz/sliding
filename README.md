@@ -1,14 +1,14 @@
-# jQuery sliding
+## jQuery sliding
 
-# About the plugin ?
+### About the plugin ?
 
 This plugin is a slide component developed to attempt complex carousels, that can be smart enough to load dynamic content as needed.
 
-# Documentation and usage
+### Documentation and usage
 
 You can see a full reference and examples at [Sliding Github page](http://alexanmtz.github.com/sliding/ "The github page of the complete documentation")
 
-# In a nutshell:
+### In a nutshell:
     <script type="text/javascript" src="jquery.sliding.js"></script>
     <script type="text/javascript">
       $(function(){
@@ -20,7 +20,7 @@ You can see a full reference and examples at [Sliding Github page](http://alexan
         });
       </script>
 
-# Features
+### Features
 
 * You can create carousel with simple lists in one line
 * Using jQuery UI theme support
@@ -28,17 +28,17 @@ You can see a full reference and examples at [Sliding Github page](http://alexan
 * Request new elements for carousels just when needed, caching the current viewed pages
 * Option for auto height adjustment, this way is possible to have different content sizes
 
-# Tested
+### Tested
 
 * Firefox 3+ Windows / MAC / Linux
 * IE 7+ Windows
 * A complete test suite using [Jasmine](http://pivotal.github.com/jasmine/ "Jasmine - BDD for your javascript")
 
-# Dependencies
+### Dependencies
 * jquery.scrollTo - [Ariel Flesler](http://flesler.blogspot.com/2007/10/jqueryscrollto.html "ScrollTo jQuery plugin")
 * jquery.easing - [http://gsgd.co.uk/sandbox/jquery/easing/](http://gsgd.co.uk/sandbox/jquery/easing/ "jQuery easing plugin")
 
-# Version history
+### Version history
 * 1.4
   * Firefox bug when reload the page
 * 1.1.1
