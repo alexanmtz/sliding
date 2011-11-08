@@ -20,23 +20,23 @@
         });
 
         //mode horizontal with ajax
-        $('.sliding-horizontal-ajax').sliding({
+        var slideHorizontalAjax = $('.sliding-horizontal-ajax');
+        slideHorizontalAjax.sliding({
             mode: 'horizontal',
             items: 3,
             url: 'json.php',
             target: '.ui-sliding-ajax-navigation',
-            beforeRemoteSlide: function() {
+            before: function() {
               $(this).append('<div class="loading">loading</div>');
             },
-            onAppend: function(json) {
-              $(this).sliding('setTotalPages', json.pages);
-              $(this).sliding('refresh');
-              return json.content;
-            },
-            onNextRemote: function() {
+            nextRemote: function() {
               $(this).find('.loading').remove();
             }
         });
+        slideHorizontalAjax.sliding('restart');
+        slideHorizontalAjax.sliding('setTotalPages', 5);
+        slideHorizontalAjax.sliding('refresh');
+        
         $('.destroy').bind('click', function(){
           $('.sliding-horizontal').sliding('destroy');
           return false;
