@@ -5,8 +5,45 @@
 		<title>alexanmtz/sliding @ GitHub</title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<link href="javascripts/google-code-prettify/prettify.css" type="text/css" rel="stylesheet" />
+		<link href="https://raw.github.com/alexanmtz/sliding/blob/master/jquery.sliding.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="javascripts/google-code-prettify/prettify.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/alexanmtz/sliding/blob/master/jquery.sliding.js"></script>
 		<script type="text/javascript" src="javascripts/main.js"></script>
+		 <script type="text/javascript">
+		    $(function(){
+		        //mode horizontal
+		        var slidingHorizontal = $('.sliding-horizontal');
+		        slidingHorizontal.sliding({
+		            mode: 'horizontal',
+		            items: 3,
+		            target: '.ui-sliding-navigation'
+		        });
+		        slidingHorizontal.sliding('restart');
+		
+		        //mode horizontal with ajax
+		        var slideHorizontalAjax = $('.sliding-horizontal-ajax');
+		        slideHorizontalAjax.sliding({
+		            mode: 'horizontal',
+		            items: 3,
+		            url: 'json.php',
+		            target: '.ui-sliding-ajax-navigation',
+		            before: function() {
+		              $(this).append('<div class="loading">loading</div>');
+		            },
+		            nextRemote: function() {
+		              $(this).find('.loading').remove();
+		            }
+		        });
+		        slideHorizontalAjax.sliding('restart');
+		        slideHorizontalAjax.sliding('setTotalPages', 5);
+		        slideHorizontalAjax.sliding('refresh');
+		        
+		        $('.destroy').bind('click', function(){
+		          $('.sliding-horizontal').sliding('destroy');
+		          return false;
+		        });
+		    });
+    	</script>
 	</head>
 	<body onload="prettyPrint()">
 		<a href="https://github.com/alexanmtz/sliding"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
@@ -44,7 +81,37 @@
 <pre class="prettyprint">
 $('#sliding-content').sliding();
 </pre>
-			<h2>License</h2>
+		<h4>Examples</h4>
+		<div id="examples">
+		    <div class="demo horizontal-demo">
+		      <h2>Simple sliding horizontal</h2>
+		      <div class="sliding-horizontal">
+		        <ul>
+		          <li><img src="thumbs/image01.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image02.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image03.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image04.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image05.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image06.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image02.jpg" width="200" height="200" /></li>
+		        </ul>
+		      </div>
+		      <div class="ui-sliding-navigation"></div>
+		      <a href="#" class="destroy">destroy!</a>
+		    </div>
+		    <div class="demo horizontal-demo">
+		      <h2>Simple sliding horizontal with ajax</h2>
+		      <div class="sliding-horizontal-ajax">
+		        <ul>
+		          <li><img src="thumbs/image01.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image02.jpg" width="200" height="200" /></li>
+		          <li><img src="thumbs/image03.jpg" width="200" height="200" /></li>
+		        </ul>
+		      </div>
+		      <div class="ui-sliding-ajax-navigation"></div>
+		    </div>
+	  		</div>
+		<h2>License</h2>
 			<p>
 				MIT
 			</p>
