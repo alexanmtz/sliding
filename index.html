@@ -4,8 +4,11 @@
 		<meta charset='utf-8'>
 		<title>alexanmtz/sliding @ GitHub</title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link href="javascripts/google-code-prettify/prettify.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="javascripts/google-code-prettify/prettify.js"></script>
+		<script type="text/javascript" src="javascripts/main.js"></script>
 	</head>
-	<body>
+	<body onload="prettyPrint()">
 		<a href="https://github.com/alexanmtz/sliding"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 		<div id="container">
 			<div class="download">
@@ -27,18 +30,18 @@
 			</ul>
 			<h2>Basic Usage</h2>
 			<h4>Markup</h4>
-<pre>
-<div id="sliding-content">
-	<ul>
-		<li>item 1</li>
-		<li>item 2</li>
-		<li>item 3</li>
-		<li>item 4</li>
-	</ul>					
-</div>
+<pre class="prettyprint">
+&lt;div id=&quot;sliding-content&quot;&gt;
+	&lt;ul&gt;
+		&lt;li&gt;item 1&lt;/li&gt;
+		&lt;li&gt;item 2&lt;/li&gt;
+		&lt;li&gt;item 3&lt;/li&gt;
+		&lt;li&gt;item 4&lt;/li&gt;
+	&lt;/ul&gt;					
+&lt;/div&gt;
 </pre>
 <h4>Code</h4>
-<pre>
+<pre class="prettyprint">
 $('#sliding-content').sliding();
 </pre>
 			<h2>License</h2>
