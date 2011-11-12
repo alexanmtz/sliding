@@ -6,7 +6,9 @@ This plugin is a slide component developed to attempt complex carousels, that ca
 
 ### Documentation and usage
 
-You can see a full reference and examples at [Sliding Github page](http://alexanmtz.github.com/sliding/ "The github page of the complete documentation")
+You can see examples at [Sliding Github page](http://alexanmtz.github.com/sliding/ "The github page of usage examples")
+
+You can get reference about documentation at [Sliding Github wiki](https://github.com/alexanmtz/sliding/wiki "The github wiki about the documentation")
 
 ### In a nutshell:
     <script type="text/javascript" src="jquery.sliding.js"></script>
