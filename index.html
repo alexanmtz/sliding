@@ -4,10 +4,14 @@
 		<meta charset='utf-8'>
 		<title>alexanmtz/sliding @ GitHub</title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<link href="javascripts/google-code-prettify/prettify.css" type="text/css" rel="stylesheet" />
-		<link href="https://raw.github.com/alexanmtz/sliding/blob/master/jquery.sliding.css" type="text/css" rel="stylesheet" />
-		<script type="text/javascript" src="javascripts/google-code-prettify/prettify.js"></script>
-		<script type="text/javascript" src="https://raw.github.com/alexanmtz/sliding/blob/master/jquery.sliding.js"></script>
+		<link href="google-code-prettify/prettify.css" type="text/css" rel="stylesheet" />
+		<link href="https://raw.github.com/alexanmtz/sliding/master/jquery.sliding.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
+		<script type="text/javascript" language="JavaScript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+		<script type="text/javascript" language="JavaScript" src="https://raw.github.com/alexanmtz/sliding/master/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" language="JavaScript" src="https://raw.github.com/alexanmtz/sliding/master/jquery.scrollTo-1.4.2.js"></script>
+		<script type="text/javascript" src="google-code-prettify/prettify.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/alexanmtz/sliding/master/jquery.sliding.js"></script>
 		<script type="text/javascript" src="javascripts/main.js"></script>
 		 <script type="text/javascript">
 		    $(function(){
@@ -25,7 +29,7 @@
 		        slideHorizontalAjax.sliding({
 		            mode: 'horizontal',
 		            items: 3,
-		            url: 'json.php',
+		            url: 'ajax.html',
 		            target: '.ui-sliding-ajax-navigation',
 		            before: function() {
 		              $(this).append('<div class="loading">loading</div>');
@@ -85,6 +89,13 @@ $('#sliding-content').sliding();
 		<div id="examples">
 		    <div class="demo horizontal-demo">
 		      <h2>Simple sliding horizontal</h2>
+<pre class="prettyprint">
+	$('.sliding-horizontal').sliding({
+        mode: 'horizontal',
+        items: 3,
+        target: '.ui-sliding-navigation'
+    });
+</pre>
 		      <div class="sliding-horizontal">
 		        <ul>
 		          <li><img src="thumbs/image01.jpg" width="200" height="200" /></li>
@@ -97,10 +108,29 @@ $('#sliding-content').sliding();
 		        </ul>
 		      </div>
 		      <div class="ui-sliding-navigation"></div>
-		      <a href="#" class="destroy">destroy!</a>
+		      <a href="#" class="destroy">destroy the plugin</a>
 		    </div>
 		    <div class="demo horizontal-demo">
 		      <h2>Simple sliding horizontal with ajax</h2>
+<pre class="prettyprint">
+	//mode horizontal with ajax
+    var slideHorizontalAjax = $('.sliding-horizontal-ajax');
+   	slideHorizontalAjax.sliding({
+        mode: 'horizontal',
+        items: 3,
+        url: 'ajax.html',
+        target: '.ui-sliding-ajax-navigation',
+        before: function() {
+          $(this).append('<div class="loading">loading</div>');
+        },
+        nextRemote: function() {
+          $(this).find('.loading').remove();
+        }
+    });
+    slideHorizontalAjax.sliding('restart');
+    slideHorizontalAjax.sliding('setTotalPages', 5);
+    slideHorizontalAjax.sliding('refresh');
+</pre>
 		      <div class="sliding-horizontal-ajax">
 		        <ul>
 		          <li><img src="thumbs/image01.jpg" width="200" height="200" /></li>

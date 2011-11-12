@@ -13,6 +13,36 @@ a:hover {
 	margin: 0 auto;
 	width: 960px;
 }
+
+
+.horizontal-demo {
+  overflow: hidden;
+}
+
+.sliding-horizontal li, .sliding-horizontal-ajax li {
+  width: 100px;
+  border: 1px solid gray;
+  float: left;
+  padding: 6px;
+  margin: 8px;
+  overflow: hidden;
+  width: 150px;
+}
+
+.ui-sliding-navigation a {
+	display: inline-block;
+	margin: 0 10px;
+	text-decoration: none;
+}
+
+.destroy {
+	float: right;	
+}
+
+.ui-state-disabled {
+	color: gray !important;
+}
+
 h1 {
 	font-size: 3.8em;
 	color: #09061e;
