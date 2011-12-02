@@ -383,10 +383,10 @@ describe("Sliding", function() {
           newData = '';
           var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
           nav.insertAfter(container);
-          newData = [{
+          newData = {
             pages: 3,
             content: '<li>jsonitem 04</li><li>jsonitem 05</li><li>jsonitem 06</li>'
-          }];
+          };
           spyOn($, 'ajax').andCallFake(function(options){
             options.success(newData);
           });
@@ -404,7 +404,7 @@ describe("Sliding", function() {
           });
           $(container).sliding('setTotalPages', 2);
           $(container).sliding('goToPage', 2);
-          expect(callback).toHaveBeenCalledWith(newData[0]);
+          expect(callback).toHaveBeenCalledWith(newData);
 
        });
      });

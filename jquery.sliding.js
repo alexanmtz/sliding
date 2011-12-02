@@ -137,7 +137,7 @@ $.widget( "ui.sliding", {
        type: "GET",
        data: this.options.params,
        success: function(data){
-         var content = self.options.onAppend.call(self.element, data[0]) || data;
+         var content = self.options.onAppend.call(self.element, data) || data;
          $(self.element).children(self.options.wrapper).append(content);
          self.makeSlide(delta, page);
          self._trigger('nextRemote',{
