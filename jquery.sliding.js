@@ -104,19 +104,27 @@ $.widget( "ui.sliding", {
   },
   _bindNext: function() {
     var self = this;
+    self.nextButton.removeClass(this.options.disabledClass);
     self.nextButton.unbind('click.sliding').bind('click.sliding', function(e){
-      self._unbindNext();
       var nextPage = self.getCurrentPage() + 1;
+      self._trigger('navClicked', {target: self.element}, {
+        clickedButton: self.nextButton,
+        currentPage: nextPage
+      });
       self.goToPage(nextPage);
       return false;
     });
   },
   _bindPrev: function() {
     var self = this;
+    self.prevButton.removeClass(this.options.disabledClass);
     self.prevButton.unbind('click.sliding').bind('click.sliding', function(e){
-      self._unbindNext();
       var prevPage = self.getCurrentPage() - 1;
       if (prevPage) {
+        self._trigger('navClicked', {target: self.element}, {
+          clickedButton: self.prevButton,
+          currentPage: prevPage
+        });
         self.goToPage(prevPage);
       }
       return false;
@@ -202,37 +210,31 @@ $.widget( "ui.sliding", {
     var cur = this.getCurrentPage();
     var totalPages = this.getTotalPages();
     if(cur == 1) {
-      this.prevButton.addClass(this.options.disabledClass);
-      this.nextButton.removeClass(this.options.disabledClass);
       this._unbindPrev();
       this._bindNext();
     } else if(cur == this.pages) {
-      this.nextButton.addClass(this.options.disabledClass);
-      this.prevButton.removeClass(this.options.disabledClass);
       this._unbindNext();
       this._bindPrev();
     } else {
-      this.nextButton.removeClass(this.options.disabledClass);
-      this.prevButton.removeClass(this.options.disabledClass);
       this._bindPrev();
       this._bindNext();
     }
     if(cur == 1 && totalPages == 1){
-      this.prevButton.addClass(this.options.disabledClass);
-      this.nextButton.addClass(this.options.disabledClass);
       this._unbindNext();
       this._unbindPrev();
     }
   },
   _unbindNext: function() {
-     this.nextButton.unbind('click.sliding').bind('click.sliding',function(){
-        return false;
-     });
+    this.nextButton.addClass(this.options.disabledClass);
+    this.nextButton.unbind('click.sliding').bind('click.sliding',function(){
+      return false;
+    });
   },
   _unbindPrev: function() {
-     this.prevButton.unbind('click.sliding').bind('click.sliding',function(){
-        return false;
-     });
+    this.prevButton.addClass(this.options.disabledClass);
+    this.prevButton.unbind('click.sliding').bind('click.sliding',function(){
+      return false;
+    });
   },
   restart: function() {
     this.goToPage(1);
