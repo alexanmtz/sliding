@@ -270,6 +270,23 @@ describe("Sliding", function() {
         expect($(container).find('li').length).toBe(45);
         expect($(container).get(0)).beInRange(15,30);
      });
+      it("should disable navigation buttons", function() {
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test',
+          items: 15 // one page
+        });
+
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('refresh');
+
+        var slidingInstance = $(container).data("sliding");
+        spyOn(slidingInstance, "disable");
+
+        $('.test-next').trigger('click');
+        expect(slidingInstance.disable).toHaveBeenCalled();
+      });
      it("should have a successfull ajax callback", function(){
        var callback = jasmine.createSpy();
        $(container).sliding({

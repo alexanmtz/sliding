@@ -136,37 +136,35 @@ $.widget( "ui.sliding", {
      self._setCurrentPage(page);
      var urlFormat = this.getUrlFormat();
      if (this.options.url && !this.pageCached(delta)) {
-     self._trigger('before',{
-       target: self.element
-     });
-     $.ajax({
-       context: self,
-       url: urlFormat,
-       type: "GET",
-       data: this.options.params,
-       success: function(data){
-         var content = self.options.onAppend.call(self.element, data) || data;
-         $(self.element).children(self.options.wrapper).append(content);
-         self.makeSlide(delta, page);
-         self._trigger('nextRemote',{
-           'target': self.element
-         },{
-           'data': data
-         });
-       },
-       error: function(x){
-         if (window.console) {
-           console.debug('ajax error: ', x.statusText);
+       self.disable();
+       self._trigger('before', {target: self.element});
+       $.ajax({
+         context: self,
+         url: urlFormat,
+         type: "GET",
+         data: this.options.params,
+         success: function(data){
+           var content = self.options.onAppend.call(self.element, data) || data;
+           $(self.element).children(self.options.wrapper).append(content);
+           self.makeSlide(delta, page);
+           self._trigger('nextRemote',{
+             'target': self.element,
+           },{
+             'data': data
+           });
+         },
+         error: function(x){
+           if (window.console) {
+             console.debug('ajax error: ', x.statusText);
+           }
+           else {
+             alert('ajax error: ', x.statusText);
+           }
          }
-         else {
-           alert('ajax error: ', x.statusText);
-         }
-       }
-     });
-   }
-   else {
-     self.makeSlide(delta, page);
-   }
+       });
+     } else {
+       self.makeSlide(delta, page);
+     }
   },
   makeSlide: function(delta, page) {
     var self = this;
