@@ -261,6 +261,17 @@ describe("Sliding", function() {
         });
      });
 
+     it("should set ignoreCache to false", function() {
+       $(container).sliding({
+         next: '.test-next',
+         prev: '.test-prev'
+       });
+       $(container).sliding('option', 'url', "new_url");
+       expect($(container).sliding("getIgnoreCache")).toBeTruthy();
+
+       $('.test-next').trigger('click');
+       expect($(container).sliding("getIgnoreCache")).toBeFalsy();
+     });
      it("should set the correct dimensions with the width based on total pages", function() {
         $('ul li',container).css('width', 100);
         $(container).sliding({

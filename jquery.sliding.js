@@ -172,7 +172,7 @@ $.widget( "ui.sliding", {
          type: "GET",
          data: this.options.params,
          success: function(data){
-           self.options.ignoreCache = false;
+           self.ignoreCache = false;
            var content = $(self.options.onAppend.call(self.element, data) || data);
            content.addClass(self.pageClass + page);
 
