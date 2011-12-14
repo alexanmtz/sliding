@@ -41,6 +41,8 @@ $.widget( "ui.sliding", {
   pages: 0,
   elementDimensions: 0,
   visited: [],
+  ignoreCache: false,
+  pageClass: "sliding-page-",
   _create: function() {
     var self = this;
     $(this.element).addClass(this.uiClasses);
@@ -50,6 +52,31 @@ $.widget( "ui.sliding", {
     this._createNav();
     this._navHandlers();
     this.refresh();
+
+    var pageClass = this.pageClass + 1;
+    var items = $(this.element).find(this.options.item);
+
+    if (items.length > this.options.items) {
+      items.slice(0, this.options.items).addClass(pageClass);
+
+    } else {
+      items.addClass(pageClass);
+    }
+  },
+ _setOption: function( key, value ) {
+    switch( key ) {
+      case "url":
+        this.ignoreCache = true;
+        break;
+    }
+
+    $.Widget.prototype._setOption.apply( this, arguments );
+    if (this._super) {
+      this._super( "_setOption", key, value );
+    }
+  },
+  getIgnoreCache: function() {
+    return this.ignoreCache;
   },
   getSlidingOffset: function() {
     return parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * (this.options.items)
@@ -68,7 +95,6 @@ $.widget( "ui.sliding", {
     }
   },
   _setOverallSize: function(items) {
-    
     var overallSize =  parseInt(this.elementDimensions * items);
     $(this.element).children(this.options.wrapper).css({
        'width': overallSize
@@ -131,11 +157,13 @@ $.widget( "ui.sliding", {
     });
   },
   goToPage: function(page) {
+     page = parseInt(page, 10);
+
      var self = this;
      var delta = (page-1)*this.options.items;
      self._setCurrentPage(page);
      var urlFormat = this.getUrlFormat();
-     if (this.options.url && !this.pageCached(delta)) {
+     if (this.options.url && !this.pageCached(page)) {
        self.disable();
        self._trigger('before', {target: self.element});
        $.ajax({
@@ -144,8 +172,19 @@ $.widget( "ui.sliding", {
          type: "GET",
          data: this.options.params,
          success: function(data){
-           var content = self.options.onAppend.call(self.element, data) || data;
-           $(self.element).children(self.options.wrapper).append(content);
+           self.options.ignoreCache = false;
+           var content = $(self.options.onAppend.call(self.element, data) || data);
+           content.addClass(self.pageClass + page);
+
+           var previousElement = $(self.pageClass + (page + 1), self.element);
+
+           if (previousElement.length > 0) {
+             previousElement.before(content);
+
+           } else {
+             $(self.element).children(self.options.wrapper).append(content);
+           }
+
            self.makeSlide(delta, page);
            self._trigger('nextRemote',{
              'target': self.element,
@@ -163,19 +202,29 @@ $.widget( "ui.sliding", {
          }
        });
      } else {
+       var pageClass = self.pageClass + page;
+
+       if ($(pageClass).length == 0) {
+         $(this.element).
+            find(this.options.item).
+            slice(delta, this.options.items * page).
+            addClass(pageClass);
+       }
+
        self.makeSlide(delta, page);
      }
   },
   makeSlide: function(delta, page) {
     var self = this;
-    var targetElement = $(self.element).find(self.options.item).eq(delta);
+    var targetElement = $("." + self.pageClass + page, self.element);
+
     $(this.element).clearQueue('fx').scrollTo(targetElement, self.options.speed,
       {
         'easing': self.options.easing,
         'onAfter': function(){
           self.refresh();
           if(self.options.autoHeight) {
-          	self._adjustHeight($(targetElement).height());
+            self._adjustHeight($(targetElement).height());
           }
           self._trigger('finish', {target: self.element}, {
             'currentElement' : targetElement
@@ -193,16 +242,16 @@ $.widget( "ui.sliding", {
       return newUrl;
     }
   },
-  pageCached: function(index) {
-    return this.element.find(this.options.item).eq(index).length;
+  pageCached: function(page) {
+    return !this.ignoreCache && !!this.element.find("." + this.pageClass + page).length;
   },
   _adjustHeight: function(newHeight) {
-  	$(this.element).animate({
-  		'height' : newHeight
-  	});
-  	this._trigger('resize', {target: self.element},{
-  		'newHeight' : newHeight
-  	});
+    $(this.element).animate({
+      'height' : newHeight
+    });
+    this._trigger('resize', {target: self.element},{
+      'newHeight' : newHeight
+    });
   },
   refresh: function() {
     var cur = this.getCurrentPage();

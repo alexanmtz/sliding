@@ -96,6 +96,37 @@ describe("Sliding", function() {
       });
 
     });
+    describe("navigation buttons callback", function() {
+       var callback = jasmine.createSpy();
+
+       beforeEach(function(){
+         var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
+         nav.insertAfter(container);
+
+         $(container).sliding({
+           next: '.test-next',
+           prev: '.test-prev',
+           navClicked: callback
+         });
+      });
+
+      it("should have a successfull clicked callback with next button", function(){
+        $('.test-next').trigger('click');
+        expect(callback).toHaveBeenCalledWith(jasmine.any(Object), {
+          clickedButton: $(".test-next"),
+          currentPage: 2
+        });
+      });
+
+      it("should have a successfull clicked callback with prev button", function(){
+        $('.test-next').trigger('click');
+        $('.test-prev').trigger('click');
+        expect(callback).toHaveBeenCalledWith(jasmine.any(Object), {
+          clickedButton: $(".test-prev"),
+          currentPage: 1
+        });
+      });
+    });
     describe("navigation buttons with the option target", function(){
       beforeEach(function(){
         var nav = $('<div id="nav"></div>');
@@ -171,7 +202,6 @@ describe("Sliding", function() {
         $(container).sliding('goToPage', 3);
         $('.ui-sliding-next').click();
         expect($.ui.sliding.prototype.goToPage.callCount).toBe(2);
-
       });
     });
     describe("interact with the navigation buttons", function(){
@@ -201,6 +231,25 @@ describe("Sliding", function() {
          expect(currentPage).toBe(1);
        });
     });
+    describe("when changing the url", function() {
+      beforeEach(function() {
+        $(container).sliding();
+      });
+      it("should avoid the cache", function() {
+        expect($(container).sliding("getIgnoreCache")).toBeFalsy();
+        $(container).sliding('option', 'url', "new_url");
+        expect($(container).sliding("getIgnoreCache")).toBeTruthy();
+      });
+      describe("and checking if a have cache", function() {
+        it("should return false if ignoreCache is true", function() {
+          expect($(container).sliding('pageCached', 1)).toBeTruthy();;
+
+          $(container).sliding('option', 'url', "new_url");
+          expect($(container).sliding("getIgnoreCache")).toBeTruthy();
+          expect($(container).sliding('pageCached', 1)).toBeFalsy();;
+        })
+      });
+    });
     describe("remote sliding", function(){
       newData = '';
       beforeEach(function(){
@@ -210,8 +259,8 @@ describe("Sliding", function() {
         spyOn($, 'ajax').andCallFake(function(options){
           options.success(newData);
         });
-
      });
+
      it("should set the correct dimensions with the width based on total pages", function() {
         $('ul li',container).css('width', 100);
         $(container).sliding({
@@ -426,56 +475,56 @@ describe("Sliding", function() {
        });
      });
      describe("Automatic height adjustment", function(){
-		it("should adjust to new height when go to last page", function(){
-			list_item = $(container).find('li');
-			list_item.css('height', 150);
-			$(container).find('li:last').css('height', 90);
-			$(container).sliding({
-				items : 1,
-				autoHeight: true
-			});
-			$(container).sliding('goToPage', 15);
-			expect($(container).height()).toEqual(90);
-		});
-		it("should adjust when go to last page and then adjust again", function(){
-			list_item = $(container).find('li');
-			list_item.css('height', 150);
-			$(container).find('li:last').css('height', 90);
-			$(container).sliding({
-				items : 1,
-				autoHeight: true
-			});
-			$(container).sliding('goToPage', 15);
-			expect($(container).height()).toEqual(90);
-			$(container).sliding('goToPage', 14);
-			expect($(container).height()).toEqual(150);
-		});
-		it("should adjust when items is greater than one", function() {
-			list_item = $(container).find('li');
-			list_item.css('height', 150);
-			$(container).find('li:eq(10)').css('height', 90);
-			$(container).sliding({
-				items : 5,
-				autoHeight: true
-			});
-			$(container).sliding('goToPage', 3);
-			expect($(container).height()).toEqual(90);
-			$(container).sliding('goToPage', 2);
-			expect($(container).height()).toEqual(150);
-		});
-		it("should call a callback with the height adjusted", function(){
-			var callback = jasmine.createSpy();
-			list_item = $(container).find('li');
-			list_item.css('height', 150);
-			$(container).find('li:last').css('height', 90);
-			$(container).sliding({
-				items : 1,
-				autoHeight: true,
-				resize: callback
-			});
-			$(container).sliding('goToPage', 15);
-			expect(callback).toHaveBeenCalledWith(jasmine.any(Object),{ 'newHeight' : 90 });
-		});
+        it("should adjust to new height when go to last page", function(){
+          list_item = $(container).find('li');
+          list_item.css('height', 150);
+          $(container).find('li:last').css('height', 90);
+          $(container).sliding({
+            items : 1,
+            autoHeight: true
+          });
+          $(container).sliding('goToPage', 15);
+          expect($(container).height()).toEqual(90);
+        });
+        it("should adjust when go to last page and then adjust again", function(){
+          list_item = $(container).find('li');
+          list_item.css('height', 150);
+          $(container).find('li:last').css('height', 90);
+          $(container).sliding({
+            items : 1,
+            autoHeight: true
+          });
+          $(container).sliding('goToPage', 15);
+          expect($(container).height()).toEqual(90);
+          $(container).sliding('goToPage', 14);
+          expect($(container).height()).toEqual(150);
+        });
+        it("should adjust when items is greater than one", function() {
+          list_item = $(container).find('li');
+          list_item.css('height', 150);
+          $(container).find('li:eq(10)').css('height', 90);
+          $(container).sliding({
+            items : 5,
+            autoHeight: true
+          });
+          $(container).sliding('goToPage', 3);
+          expect($(container).height()).toEqual(90);
+          $(container).sliding('goToPage', 2);
+          expect($(container).height()).toEqual(150);
+        });
+        it("should call a callback with the height adjusted", function(){
+          var callback = jasmine.createSpy();
+          list_item = $(container).find('li');
+          list_item.css('height', 150);
+          $(container).find('li:last').css('height', 90);
+          $(container).sliding({
+            items : 1,
+            autoHeight: true,
+            resize: callback
+          });
+          $(container).sliding('goToPage', 15);
+          expect(callback).toHaveBeenCalledWith(jasmine.any(Object),{ 'newHeight' : 90 });
+        });
      });
 
   });
