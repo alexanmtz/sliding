@@ -285,7 +285,7 @@ $.widget( "ui.sliding", {
     });
   },
   restart: function() {
-    this.goToPage(1);
+    this.goToPage(this.options.currentPage);
   },
   _setCurrentPage: function(page) {
     this.currentPage = page;
@@ -311,8 +311,8 @@ $.widget( "ui.sliding", {
     $(this.element).removeAttr('style');
     $(this.element).children(this.options.wrapper).removeAttr('style');
     this.disable();
-    this._setCurrentPage(1);
-    this.setTotalPages(1);
+    this._setCurrentPage(this.options.currentPage);
+    this.setTotalPages(this.options.currentPage);
     this.nextButton.removeClass(this.options.disabledClass);
     this.prevButton.removeClass(this.options.disabledClass);
     if(this.options.target) {

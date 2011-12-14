@@ -64,8 +64,27 @@ describe("Sliding", function() {
       it('should have pageClass based on initialization value', function() {
         expect($(".sliding-page-2").length > 0).toBeTruthy();
       });
+
+      it('should keep current page when restart', function() {
+        $(container).sliding('restart');
+        var currentPage = $(container).sliding('getCurrentPage');
+        expect(currentPage).toBe(2);
+      });
+
+      describe('when destroy', function() {
+        it('should kepp current page', function() {
+          $(container).sliding('destroy');
+          var currentPage = $(container).sliding('getCurrentPage');
+          expect(currentPage).toBe(2);
+        });
+   
+        it('should set total pages to currentPage', function() {
+          $(container).sliding('destroy');
+          var totalPages = $(container).sliding('getTotalPages');
+          expect(totalPages).toBe(2);
+        });
+      });
     });
-    
   });
 
   describe("Sliding plugin horizontal mode", function() {
@@ -127,7 +146,6 @@ describe("Sliding", function() {
       it("should remove disabled classes in the ui", function(){
         expect($('#nav').html()).toBe('');
       });
-
     });
     describe("navigation buttons callback", function() {
        var callback = jasmine.createSpy();
