@@ -28,6 +28,7 @@ $.widget( "ui.sliding", {
     easing: 'easeInOutQuad',
     autoHeight: false,
     params: {},
+    currentPage: 1,
     onAppend: function(){}
   },
   navClasses : {
@@ -37,7 +38,6 @@ $.widget( "ui.sliding", {
   uiClasses: 'ui-widget ui-widget-content ui-corner-all ui-sliding-content',
   nextButton: null,
   prevButton: null,
-  currentPage: 1,
   pages: 0,
   elementDimensions: 0,
   visited: [],
@@ -45,6 +45,7 @@ $.widget( "ui.sliding", {
   pageClass: "sliding-page-",
   _create: function() {
     var self = this;
+    this.currentPage = this.options.currentPage;
     $(this.element).addClass(this.uiClasses);
     this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
     this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
@@ -53,7 +54,7 @@ $.widget( "ui.sliding", {
     this._navHandlers();
     this.refresh();
 
-    var pageClass = this.pageClass + 1;
+    var pageClass = this.pageClass + this.currentPage;
     var items = $(this.element).find(this.options.item);
 
     if (items.length > this.options.items) {

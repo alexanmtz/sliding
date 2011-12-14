@@ -35,6 +35,39 @@ describe("Sliding", function() {
      createUnorderedList(15);
   });
 
+  describe("current page", function() {
+    describe("with default value", function() {
+      beforeEach(function() {
+        $(container).sliding();
+      });
+
+      it("should be 1 by default", function() {
+        var currentPage = $(container).sliding('getCurrentPage');
+        expect(currentPage).toBe(1);
+      });
+
+      it('should have pageClass based for page 1', function() {
+        expect($(".sliding-page-1").length > 0).toBeTruthy();
+      });
+    });
+
+    describe("receiving currentPage 2 on initialization ", function() {
+      beforeEach(function() {
+        $(container).sliding({currentPage: 2});
+      });
+
+      it("should be based on initialization value", function() {
+        var currentPage = $(container).sliding('getCurrentPage');
+        expect(currentPage).toBe(2);
+      });
+
+      it('should have pageClass based on initialization value', function() {
+        expect($(".sliding-page-2").length > 0).toBeTruthy();
+      });
+    });
+    
+  });
+
   describe("Sliding plugin horizontal mode", function() {
     beforeEach(function(){
       $('ul li',container).css('width', 100);
