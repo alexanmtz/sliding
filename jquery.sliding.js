@@ -176,7 +176,7 @@ $.widget( "ui.sliding", {
            var content = $(self.options.onAppend.call(self.element, data) || data);
            content.addClass(self.pageClass + page);
 
-           var previousElement = $(self.pageClass + (page + 1), self.element);
+           var previousElement = $("."+ self.pageClass + (page + 1), self.element);
 
            if (previousElement.length > 0) {
              previousElement.before(content);
@@ -204,7 +204,7 @@ $.widget( "ui.sliding", {
      } else {
        var pageClass = self.pageClass + page;
 
-       if ($(pageClass).length == 0) {
+       if ($("." + pageClass).length == 0) {
          $(this.element).
             find(this.options.item).
             slice(delta, this.options.items * page).
