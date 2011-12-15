@@ -41,6 +41,8 @@ You can get reference about documentation at [Sliding Github wiki](https://githu
 * jquery.easing - [http://gsgd.co.uk/sandbox/jquery/easing/](http://gsgd.co.uk/sandbox/jquery/easing/ "jQuery easing plugin")
 
 ### Version history
+* 1.5.1
+  * Allow to pass a page when restart
 * 1.5
   * Support to initalize with current page. The default is 1.
 * 1.4
