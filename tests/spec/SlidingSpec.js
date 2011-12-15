@@ -65,10 +65,18 @@ describe("Sliding", function() {
         expect($(".sliding-page-2").length > 0).toBeTruthy();
       });
 
-      it('should keep current page when restart', function() {
-        $(container).sliding('restart');
-        var currentPage = $(container).sliding('getCurrentPage');
-        expect(currentPage).toBe(2);
+      describe('when restart', function() {
+        it('should keep current page ', function() {
+          $(container).sliding('restart');
+          var currentPage = $(container).sliding('getCurrentPage');
+          expect(currentPage).toBe(2);
+        });
+
+        it('should restart to given page ', function() {
+          $(container).sliding('restart', {page: 1});
+          var currentPage = $(container).sliding('getCurrentPage');
+          expect(currentPage).toBe(1);
+        });
       });
 
       describe('when destroy', function() {

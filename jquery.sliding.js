@@ -284,8 +284,9 @@ $.widget( "ui.sliding", {
       return false;
     });
   },
-  restart: function() {
-    this.goToPage(this.options.currentPage);
+  restart: function(options) {
+    options = options || {};
+    this.goToPage(options.page || this.options.currentPage);
   },
   _setCurrentPage: function(page) {
     this.currentPage = page;
