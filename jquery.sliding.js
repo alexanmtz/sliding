@@ -164,8 +164,9 @@ $.widget( "ui.sliding", {
      var delta = (page-1)*this.options.items;
      self._setCurrentPage(page);
      var urlFormat = this.getUrlFormat();
+     self.disable();
+
      if (this.options.url && !this.pageCached(page)) {
-       self.disable();
        self._trigger('before', {target: self.element});
        $.ajax({
          context: self,
