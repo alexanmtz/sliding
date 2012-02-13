@@ -47,9 +47,7 @@ $.widget( "ui.sliding", {
     var self = this;
     this.currentPage = this.options.currentPage;
     $(this.element).addClass(this.uiClasses);
-    this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
-    this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
-    this.enclose();
+    this.updateTotalPages();
     this._createNav();
     this._navHandlers();
     this.refresh();
@@ -297,6 +295,11 @@ $.widget( "ui.sliding", {
     if(this.options.url) {
       this._setOverallSize(totalPages*this.options.items);
     }
+  },
+  updateTotalPages: function() {
+    this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
+    this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
+    this.enclose();
   },
   getTotalPages: function() {
     return this.pages;
