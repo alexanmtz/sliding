@@ -14,7 +14,7 @@ describe("Sliding", function() {
     var ul = $('<ul></ul>');
     var list = '';
     for(var i = 0; i < items; i++) {
-      list += '<li>item</li>';
+      list += '<li class="some-class">item</li>';
     }
     if(!$(container).find('ul').length) {
       $('<ul></ul>').appendTo(container);
@@ -48,6 +48,10 @@ describe("Sliding", function() {
 
       it('should have pageClass based for page 1', function() {
         expect($(".sliding-page-1").length > 0).toBeTruthy();
+      });
+
+      it('should remove classes for each item', function() {
+        expect($("li", container).hasClass("some-class")).toBeFalsy();
       });
     });
 
