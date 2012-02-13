@@ -211,7 +211,7 @@ $.widget( "ui.sliding", {
      } else {
        var pageClass = self.pageClass + page;
 
-       if ($("." + pageClass).length == 0) {
+       if ($("." + pageClass, self).length == 0) {
          $(this.element).
             find(this.options.item).
             slice(delta, this.options.items * page).
