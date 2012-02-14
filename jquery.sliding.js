@@ -192,7 +192,7 @@ $.widget( "ui.sliding", {
              $(self.element).children(self.options.wrapper).append(content);
            }
 
-           self.makeSlide(delta, page);
+           self.makeSlide(page);
            self._trigger('nextRemote',{
              'target': self.element,
            },{
@@ -218,14 +218,17 @@ $.widget( "ui.sliding", {
             addClass(pageClass);
        }
 
-       self.makeSlide(delta, page);
+       self.makeSlide(page);
      }
   },
-  makeSlide: function(delta, page) {
+  makeSlide: function(page, options) {
     var self = this;
     var targetElement = $("." + self.pageClass + page, self.element);
 
-    $(this.element).clearQueue('fx').scrollTo(targetElement, self.options.speed,
+    var animate = (options == undefined || options.animate == undefined) ? true : options.animate;
+    var speed = animate ? self.options.speed : 0;
+
+    $(this.element).clearQueue('fx').scrollTo(targetElement, speed,
       {
         'easing': self.options.easing,
         'onAfter': function(){
