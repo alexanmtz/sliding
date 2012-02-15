@@ -171,8 +171,9 @@ $.widget( "ui.sliding", {
      var urlFormat = this.getUrlFormat();
      self.disable();
 
+     self._trigger('before', {target: self.element});
+
      if (this.options.url && !this.pageCached(page)) {
-       self._trigger('before', {target: self.element});
        $.ajax({
          context: self,
          url: urlFormat,
@@ -212,10 +213,7 @@ $.widget( "ui.sliding", {
        var pageClass = self.pageClass + page;
 
        if ($("." + pageClass, self).length == 0) {
-         $(this.element).
-            find(this.options.item).
-            slice(delta, this.options.items * page).
-            addClass(pageClass);
+         this.getItems(page).addClass(pageClass);
        }
 
        self.makeSlide(page);
@@ -251,6 +249,12 @@ $.widget( "ui.sliding", {
       newUrl = newUrl.replace("{page}", this.getCurrentPage());
       return newUrl;
     }
+  },
+  getItems: function(page) {
+    var items = $(this.element).find(this.options.item);
+    var start = this.options.items * (page - 1);
+
+    return items.slice(start, start + this.options.items);
   },
   pageCached: function(page) {
     return !this.ignoreCache && !!this.element.find("." + this.pageClass + page).length;
