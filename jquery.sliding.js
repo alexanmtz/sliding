@@ -194,11 +194,7 @@ $.widget( "ui.sliding", {
            }
 
            self.makeSlide(page);
-           self._trigger('nextRemote',{
-             'target': self.element,
-           },{
-             'data': data
-           });
+           self._trigger('nextRemote', {'target': self.element}, {'data': data});
          },
          error: function(x){
            if (window.console) {
