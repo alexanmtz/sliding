@@ -330,9 +330,6 @@ $.widget( "ui.sliding", {
           'currentElement' : targetElement
         });
       }
-      self._trigger('finish', {target: self.element}, {
-        'currentElement' : targetElement
-      });
     }
 
     $(this.element).clearQueue('fx').scrollTo(targetElement, speed, opts);
