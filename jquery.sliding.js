@@ -2,7 +2,7 @@
  *
  * @name jQuery sliding plugin
  * @namespace jQuery
- * @author Alexandre Magno (http://blog.alexandremagno.net)
+ * @author Alexandre Magno, Túlio Ornelas, Daniel Fernandes and Emerson Macedo (http://blog.alexandremagno.net)
  * @version 1.4
  * @description jQuery ui slider horizontal or vertical
  * @requires
@@ -16,6 +16,7 @@
 $.widget( "ui.sliding", {
   options: {
     items: 5,
+    columns: null,
     item: 'li',
     mode: 'horizontal',
     target: false,
@@ -42,18 +43,34 @@ $.widget( "ui.sliding", {
   elementDimensions: 0,
   visited: [],
   ignoreCache: false,
+  pageClassTemplate: "sliding-page",
   pageClass: "sliding-page-",
+  pageContainerClass: "sliding-page-container",
   _create: function() {
     var self = this;
+    var groupElements = false;
+
+    if (!this.options.columns) {
+      this.options.columns = this.options.items;
+    } else {
+      groupElements = true
+    }
+
     this.currentPage = this.options.currentPage;
     $(this.element).addClass(this.uiClasses);
+
+    this._addPaginationClass();
     this.updateTotalPages();
     this._createNav();
     this._navHandlers();
-    this._addPaginationClass();
+
+    if (groupElements) {
+      this._slicePages();
+    }
+
     this.refresh();
   },
- _setOption: function( key, value ) {
+  _setOption: function( key, value ) {
     switch( key ) {
       case "url":
         this.ignoreCache = true;
@@ -65,38 +82,119 @@ $.widget( "ui.sliding", {
       this._super( "_setOption", key, value );
     }
   },
-  _addPaginationClass: function() {
-    this._removePaginationClass();
+  _removeAttrs: function(element, regex) {
+    var self = $(element);
+    $.each(self[0].attributes, function(i, attr) {
+      if (attr && attr.specified && regex.test(attr.name)) {
+        self.removeAttr(attr.name);
+      }
+    });
+  },
+  _slicePages: function() {
+    var items = $(this.element).find(this.options.item);
+    var item = $(items[0]);
 
-    var pageClass = this.pageClass + this.currentPage;
+    var parentTemplate = item.parent().clone();
+    parentTemplate.html("");
+    parentTemplate.removeAttr("style");
+    parentTemplate.removeAttr("class");
+    this._removeAttrs(parentTemplate, /^data-*/);
+
+    var itemTemplate = item.clone();
+    itemTemplate.html("");
+    itemTemplate.removeAttr("style");
+    itemTemplate.removeAttr("class");
+    itemTemplate.addClass(this.pageContainerClass);
+    this._removeAttrs(itemTemplate, /^data-*/);
+    itemTemplate.width(this.element.width());
+
+    var totalPages = Math.ceil(items.length/this.options.items);
+
+    var index = 0;
+    for(var i = 0; i < totalPages; i++) {
+      var selectedItens = items.slice(index, this.options.items + index);
+      var itemWrapper = itemTemplate.clone();
+      itemWrapper.height(
+        Math.ceil(selectedItens.length/this.options.columns) * selectedItens.height()
+      );
+
+      selectedItens.wrapAll(itemWrapper.append(parentTemplate.clone()));
+      index += this.options.items;
+    }
+  },
+  _removeSlices: function() {
+    $(this.element).
+      find(this.options.item).
+      not("." + this.pageContainerClass).
+      unwrap().
+      unwrap();
+  },
+  _getPageClass: function(index) {
+    if (!index) {
+      index = this.getCurrentPage();
+    }
+    return this.pageClass + index;
+  },
+  _addPaginationClass: function() {
+    var pageClass = this._getPageClass();
     var items = $(this.element).find(this.options.item);
 
     if (items.length > this.options.items) {
-      items.slice(0, this.options.items).addClass(pageClass);
+      items.slice(0, this.options.items).
+      addClass(this.pageClassTemplate + " " + pageClass);
+
     } else {
-      items.addClass(pageClass);
+      items.addClass(this.pageClassTemplate + " " + pageClass);
     }
   },
   _removePaginationClass: function() {
-    var items = $(this.element).find(this.options.item);
-    items.removeAttr("class");
+    $(this.element).find(this.options.item).removeClass(this.pageClassTemplate);
+    for (var i = 0; i < this.pages; i++) {
+      var pageClass = this._getPageClass(i);
+      $("." + pageClass, this.element).removeClass(pageClass);
+    }
   },
   getIgnoreCache: function() {
     return this.ignoreCache;
   },
   getSlidingOffset: function() {
-    return parseInt($(this.element).find(this.options.item).eq(0).outerWidth(true)) * (this.options.items)
+    var outer = $(this.element).
+      find(this.options.item).
+      not("." + this.pageContainerClass).
+      eq(0).
+      outerWidth(true);
+
+    return parseInt(outer) * (this.options.columns)
+  },
+  getSlidingHeightOffset: function() {
+    var outer = $(this.element).
+      find(this.options.item).
+      not("." + this.pageContainerClass).
+      eq(0).
+      outerHeight(true);
+
+    var items = $("." + this._getPageClass(), this.element);
+    return parseInt(outer) * (Math.ceil(items.length/this.options.columns))
   },
   enclose: function() {
     this._setContainerSize();
-    this._setOverallSize(this.element.find(this.options.item).length);
+    this._setOverallSize(
+      this.
+        element.
+        find(this.options.item).
+        not("." + this.pageContainerClass).
+        length
+    );
   },
   _setContainerSize: function() {
-    var containerSize = this.getSlidingOffset();
+    var containerWidth = this.getSlidingOffset();
+    var containerHeight = this.getSlidingHeightOffset();
+
     if (this.options.mode == 'horizontal') {
       $(this.element).css({
         'overflow': 'hidden',
-        'width': containerSize
+        'width': containerWidth,
+        'height': containerHeight
       });
     }
   },
@@ -127,7 +225,6 @@ $.widget( "ui.sliding", {
       this.nextButton.addClass(self.navClasses.next);
       this.prevButton.addClass(self.navClasses.prev);
     }
-
   },
   _navHandlers: function() {
     var self = this;
@@ -206,10 +303,10 @@ $.widget( "ui.sliding", {
          }
        });
      } else {
-       var pageClass = self.pageClass + page;
+       var pageClass = this._getPageClass(page);
 
        if ($("." + pageClass, self).length == 0) {
-         this.getItems(page).addClass(pageClass);
+         this.getItems(page).addClass(this.pageClassTemplate + " " + pageClass);
        }
 
        self.makeSlide(page);
@@ -217,24 +314,32 @@ $.widget( "ui.sliding", {
   },
   makeSlide: function(page, options) {
     var self = this;
-    var targetElement = $("." + self.pageClass + page, self.element);
+    var targetElement = $("." + this._getPageClass(page), self.element);
 
     var animate = (options == undefined || options.animate == undefined) ? true : options.animate;
     var speed = animate ? self.options.speed : 0;
-
-    $(this.element).clearQueue('fx').scrollTo(targetElement, speed,
-      {
-        'easing': self.options.easing,
-        'onAfter': function(){
-          self.refresh();
-          if(self.options.autoHeight) {
-            self._adjustHeight($(targetElement).height());
-          }
-          self._trigger('finish', {target: self.element}, {
-            'currentElement' : targetElement
-          });
+    var opts = {
+      'easing': self.options.easing,
+      'onAfter': function(){
+        self.refresh();
+        if(self.options.autoHeight) {
+          var targetHeight = Math.ceil(targetElement.length/self.options.columns) * targetElement.height();
+          self._adjustHeight(targetHeight);
         }
+        self._trigger('finish', {target: self.element}, {
+          'currentElement' : targetElement
+        });
+      }
+      self._trigger('finish', {target: self.element}, {
+        'currentElement' : targetElement
       });
+    }
+
+    $(this.element).clearQueue('fx').scrollTo(targetElement, speed, opts);
+
+    $(this.element).
+      clearQueue('fx').
+      scrollTo(targetElement, speed, opts);
   },
   getUrlFormat: function() {
     if(!this.options.urlFormat) {
@@ -247,13 +352,13 @@ $.widget( "ui.sliding", {
     }
   },
   getItems: function(page) {
-    var items = $(this.element).find(this.options.item);
+    var items = $(this.element).find(this.options.item).not("." + this.pageContainerClass);
     var start = this.options.items * (page - 1);
 
     return items.slice(start, start + this.options.items);
   },
   pageCached: function(page) {
-    return !this.ignoreCache && !!this.element.find("." + this.pageClass + page).length;
+    return !this.ignoreCache && !!this.element.find("." + this._getPageClass(page)).length;
   },
   _adjustHeight: function(newHeight) {
     $(this.element).animate({
@@ -309,10 +414,27 @@ $.widget( "ui.sliding", {
   updateTotalPages: function() {
     this._removePaginationClass();
 
-    this.elementDimensions = $(this.element).find(this.options.item).eq(0).outerWidth(true);
-    this.setTotalPages(Math.ceil($(this.element).find(this.options.item).length/this.options.items));
+    this.elementDimensions = $(this.element).
+      find(this.options.item).
+      not("." + this.pageContainerClass).
+      eq(0).
+      outerWidth(true);
+
+    var elementsLength = $(this.element).
+      find(this.options.item).
+      not("." + this.pageContainerClass).
+      length;
+
+    this.setTotalPages(Math.ceil(elementsLength/this.options.items));
 
     this.enclose();
+  },
+  regroup: function() {
+    this.updateTotalPages();
+    this._removeSlices();
+    this._addPaginationClass();
+    this.enclose();
+    this._slicePages();
   },
   getTotalPages: function() {
     return this.pages;

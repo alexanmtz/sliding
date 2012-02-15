@@ -9,6 +9,7 @@ describe("Sliding", function() {
   });
 
   var container = '#sliding-container';
+  var numberOfElements = 15;
 
   function createUnorderedList(items, toreturn) {
     var ul = $('<ul></ul>');
@@ -24,7 +25,6 @@ describe("Sliding", function() {
     } else {
       $(list).appendTo($(container).find('ul'));
     }
-
   };
 
   beforeEach(function() {
@@ -32,7 +32,7 @@ describe("Sliding", function() {
       'id': 'sliding-container',
       'class' : 'sliding'
      }));
-     createUnorderedList(15);
+     createUnorderedList(numberOfElements);
   });
 
   describe("current page", function() {
@@ -50,8 +50,8 @@ describe("Sliding", function() {
         expect($(".sliding-page-1").length > 0).toBeTruthy();
       });
 
-      it('should remove classes for each item', function() {
-        expect($("li", container).hasClass("some-class")).toBeFalsy();
+      it('should keep classes for each item', function() {
+        expect($("li", container).hasClass("some-class")).toBeTruthy();
       });
     });
 
@@ -89,7 +89,7 @@ describe("Sliding", function() {
           var currentPage = $(container).sliding('getCurrentPage');
           expect(currentPage).toBe(2);
         });
-   
+
         it('should set total pages to currentPage', function() {
           $(container).sliding('destroy');
           var totalPages = $(container).sliding('getTotalPages');
@@ -600,6 +600,63 @@ describe("Sliding", function() {
           expect(callback).toHaveBeenCalledWith(jasmine.any(Object),{ 'newHeight' : 90 });
         });
      });
+  });
+
+  describe("generation of chunks of elements", function() {
+    beforeEach(function() {
+      $("ul", container).css("float", "left");
+      $("ul", container).css("list-style", "none");
+
+      $("li", container).css("float", "left");
+      $("li", container).css("width", "30%");
+      $("li", container).css("height", "40px");
+
+      $("#sliding-container").css("margin", 0);
+      $("#sliding-container").css("padding", 0);
+
+      $(container).sliding({
+        item: "li",
+        items: 6,
+        columns: 3
+      });
+    });
+
+    it("should use the parent to wrap the elements", function() {
+      expect($("ul li.sliding-page-container", container).length > 0).toBeTruthy();
+      expect($("ul li.sliding-page-container", container).length).toEqual(Math.ceil(numberOfElements/6));
+    });
+
+    it("should adjust the height for the number of columns of the row", function() {
+      var outerHeight = $(container).find("li").not(".sliding-page-container").eq(0).outerHeight(true);
+      var containers = $("ul li.sliding-page-container", container);
+
+      // considering 15 itens, 3 pages
+      expect($(containers[0]).height()).toEqual(outerHeight * 2);
+      expect($(containers[1]).height()).toEqual(outerHeight * 2);
+      expect($(containers[2]).height()).toEqual(outerHeight * 1);
+    });
+
+    describe("the regroup of elements", function() {
+      beforeEach(function() {
+        $(container).sliding("option", "items", 8);
+        $(container).sliding("option", "columns", 1);
+        $(container).sliding("regroup");
+      });
+
+      it("should rewrap the elements", function() {
+        expect($("ul li.sliding-page-container", container).length > 0).toBeTruthy();
+        expect($("ul li.sliding-page-container", container).length).toEqual(Math.ceil(numberOfElements/8));
+      });
+
+      it("should recalculate the height", function() {
+        var outerHeight = $(container).find("li").not(".sliding-page-container").eq(0).outerHeight(true);
+        var containers = $("ul li.sliding-page-container", container);
+
+        // considering 15 itens, 2 pages
+        expect($(containers[0]).height()).toEqual(outerHeight * 8);
+        expect($(containers[1]).height()).toEqual(outerHeight * 7);
+      });
+    });
 
   });
 
