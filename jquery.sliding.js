@@ -114,8 +114,10 @@ $.widget( "ui.sliding", {
     for(var i = 0; i < totalPages; i++) {
       var selectedItens = items.slice(index, this.options.items + index);
       var itemWrapper = itemTemplate.clone();
+      var outer = parseInt(selectedItens.outerHeight(true), 10);
+
       itemWrapper.height(
-        Math.ceil(selectedItens.length/this.options.columns) * selectedItens.height()
+        Math.ceil(selectedItens.length/this.options.columns) * outer
       );
 
       selectedItens.wrapAll(itemWrapper.append(parentTemplate.clone()));
@@ -149,9 +151,10 @@ $.widget( "ui.sliding", {
   },
   _removePaginationClass: function() {
     $(this.element).find(this.options.item).removeClass(this.pageClassTemplate);
+
     for (var i = 0; i < this.pages; i++) {
-      var pageClass = this._getPageClass(i);
-      $("." + pageClass, this.element).removeClass(pageClass);
+      var pageClass = this._getPageClass(i + 1);
+      $(this.element).find(this.options.item).removeClass(pageClass);
     }
   },
   getIgnoreCache: function() {
@@ -164,7 +167,7 @@ $.widget( "ui.sliding", {
       eq(0).
       outerWidth(true);
 
-    return parseInt(outer) * (this.options.columns)
+    return parseInt(outer, 10) * (this.options.columns)
   },
   getSlidingHeightOffset: function() {
     var outer = $(this.element).
@@ -174,7 +177,7 @@ $.widget( "ui.sliding", {
       outerHeight(true);
 
     var items = $("." + this._getPageClass(), this.element);
-    return parseInt(outer) * (Math.ceil(items.length/this.options.columns))
+    return parseInt(outer, 10) * (Math.ceil(items.length/this.options.columns))
   },
   enclose: function() {
     this._setContainerSize();
@@ -323,7 +326,8 @@ $.widget( "ui.sliding", {
       'onAfter': function(){
         self.refresh();
         if(self.options.autoHeight) {
-          var targetHeight = Math.ceil(targetElement.length/self.options.columns) * targetElement.height();
+          var outer = parseInt(targetElement.outerHeight(true), 10);
+          var targetHeight = Math.ceil(targetElement.length/self.options.columns) * outer;
           self._adjustHeight(targetHeight);
         }
         self._trigger('finish', {target: self.element}, {
@@ -410,7 +414,6 @@ $.widget( "ui.sliding", {
   },
   updateTotalPages: function() {
     this._removePaginationClass();
-
     this.elementDimensions = $(this.element).
       find(this.options.item).
       not("." + this.pageContainerClass).
@@ -423,13 +426,13 @@ $.widget( "ui.sliding", {
       length;
 
     this.setTotalPages(Math.ceil(elementsLength/this.options.items));
+    this._addPaginationClass();
 
     this.enclose();
   },
   regroup: function() {
     this.updateTotalPages();
     this._removeSlices();
-    this._addPaginationClass();
     this.enclose();
     this._slicePages();
   },
