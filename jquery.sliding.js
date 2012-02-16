@@ -139,7 +139,9 @@ $.widget( "ui.sliding", {
   },
   _addPaginationClass: function() {
     var pageClass = this._getPageClass();
-    var items = $(this.element).find(this.options.item);
+    var items = $(this.element).
+      find(this.options.item).
+      not("." + this.pageContainerClass);
 
     if (items.length > this.options.items) {
       items.slice(0, this.options.items).
@@ -308,8 +310,8 @@ $.widget( "ui.sliding", {
      } else {
        var pageClass = this._getPageClass(page);
 
-       if ($("." + pageClass, self).length == 0) {
-         this.getItems(page).addClass(this.pageClassTemplate + " " + pageClass);
+       if ($("." + pageClass, self.element).length == 0) {
+         self.getItems(page).addClass(self.pageClassTemplate + " " + pageClass);
        }
 
        self.makeSlide(page);
@@ -401,6 +403,7 @@ $.widget( "ui.sliding", {
   },
   restart: function(options) {
     options = options || {};
+    this._removePaginationClass();
     this.goToPage(options.page || this.options.currentPage);
   },
   _setCurrentPage: function(page) {
