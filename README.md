@@ -40,6 +40,12 @@ You can get reference about documentation at [Sliding Github wiki](https://githu
 * jquery.scrollTo - [Ariel Flesler](http://flesler.blogspot.com/2007/10/jqueryscrollto.html "ScrollTo jQuery plugin")
 * jquery.easing - [http://gsgd.co.uk/sandbox/jquery/easing/](http://gsgd.co.uk/sandbox/jquery/easing/ "jQuery easing plugin")
 
+### Authors
+* Alexandre Magno ([@alexanmtz](http://www.twitter.com/alexanmtz)) 
+* Túlio Ornelas ([@tulios](http://www.twitter.com/tulios))
+* Emerson Macedo ([@emerleite](http://www.twitter.com/emmerleite))
+* Daniel Martins ([@danielfm](http://www.twitter.com/danielfm))
+
 ### Version history
 * 1.5.1
   * Allow to pass a page when restart
