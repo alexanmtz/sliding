@@ -43,8 +43,8 @@ You can get reference about documentation at [Sliding Github wiki](https://githu
 ### Authors
 * Alexandre Magno ([@alexanmtz](http://www.twitter.com/alexanmtz)) 
 * Túlio Ornelas ([@tulios](http://www.twitter.com/tulios))
-* Emerson Macedo ([@emerleite](http://www.twitter.com/emmerleite))
-* Daniel Martins ([@danielfm](http://www.twitter.com/danielfm))
+* Emerson Macedo ([@emerleite](http://www.twitter.com/emerleite))
+* Daniel Martins ([@danielfmt](http://www.twitter.com/danielfmt))
 
 ### Version history
 * 1.5.1
