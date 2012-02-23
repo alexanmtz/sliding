@@ -12,6 +12,9 @@ describe("Sliding", function() {
   var numberOfElements = 15;
 
   function createUnorderedList(items, toreturn) {
+    // Sets the size of each LI
+    $(container).append('<style>li { width: 10px; }</style>');
+
     var ul = $('<ul></ul>');
     var list = '';
     for(var i = 0; i < items; i++) {
@@ -34,6 +37,31 @@ describe("Sliding", function() {
      }));
      createUnorderedList(numberOfElements);
   });
+
+  describe("when creating", function() {
+    beforeEach(function() {
+      $(container).sliding();
+    });
+
+    it("should adjust the container size", function() {
+      expect( $(container).width() ).toEqual(50);
+    });
+
+    it("should adjust the overall size", function() {
+      expect( $("ul", container).width() ).toEqual(150);
+    });
+  });
+
+  describe("enclosing with a specific number of items", function() {
+    beforeEach(function() {
+      $(container).sliding();
+      $(container).sliding("enclose", 30);
+    });
+
+    it("should adjust the overall size accordingly", function() {
+      expect( $("ul", container).width() ).toEqual(300);
+    });
+  })
 
   describe("current page", function() {
     describe("with default value", function() {

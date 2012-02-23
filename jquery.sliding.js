@@ -181,15 +181,13 @@ $.widget( "ui.sliding", {
     var items = $("." + this._getPageClass(), this.element);
     return parseInt(outer, 10) * (Math.ceil(items.length/this.options.columns))
   },
-  enclose: function() {
+  enclose: function(items) {
+    if (!items) {
+      items = this.element.find(this.options.item).not("." + this.pageContainerClass).length;
+    }
+
     this._setContainerSize();
-    this._setOverallSize(
-      this.
-        element.
-        find(this.options.item).
-        not("." + this.pageContainerClass).
-        length
-    );
+    this._setOverallSize(items);
   },
   _setContainerSize: function() {
     var containerWidth = this.getSlidingOffset();
