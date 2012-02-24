@@ -73,7 +73,7 @@ $.widget( "ui.sliding", {
   _setOption: function( key, value ) {
     switch( key ) {
       case "url":
-        this.ignoreCache = true;
+        this.setIgnoreCache(true);
         break;
     }
 
@@ -282,7 +282,7 @@ $.widget( "ui.sliding", {
          type: "GET",
          data: this.options.params,
          success: function(data){
-           self.ignoreCache = false;
+           self.setIgnoreCache(false);
            var content = $(self.options.onAppend.call(self.element, data) || data);
            content.addClass(self.pageClass + page);
 
@@ -362,7 +362,13 @@ $.widget( "ui.sliding", {
     return items.slice(start, start + this.options.items);
   },
   pageCached: function(page) {
-    return !this.ignoreCache && !!this.element.find("." + this._getPageClass(page)).length;
+    return !this.getIgnoreCache() && !!this.element.find("." + this._getPageClass(page)).length;
+  },
+  setIgnoreCache: function(ignoreCache) {
+    this.ignoreCache = ignoreCache;
+  },
+  getIgnoreCache: function() {
+    return this.ignoreCache;
   },
   _adjustHeight: function(newHeight) {
     $(this.element).animate({
