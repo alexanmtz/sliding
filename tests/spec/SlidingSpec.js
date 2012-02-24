@@ -188,22 +188,26 @@ describe("Sliding", function() {
       });
     });
     describe("navigation buttons callback", function() {
-       var callback = jasmine.createSpy();
+       var callback, beforeCallback;
 
        beforeEach(function(){
+         navCallback = jasmine.createSpy();
+         beforeCallback = jasmine.createSpy();
+
          var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
          nav.insertAfter(container);
 
          $(container).sliding({
            next: '.test-next',
            prev: '.test-prev',
-           navClicked: callback
+           navClicked: navCallback,
+           before: beforeCallback
          });
       });
 
       it("should have a successfull clicked callback with next button", function(){
         $('.test-next').trigger('click');
-        expect(callback).toHaveBeenCalledWith(jasmine.any(Object), {
+        expect(navCallback).toHaveBeenCalledWith(jasmine.any(Object), {
           clickedButton: $(".test-next"),
           currentPage: 2
         });
@@ -212,10 +216,17 @@ describe("Sliding", function() {
       it("should have a successfull clicked callback with prev button", function(){
         $('.test-next').trigger('click');
         $('.test-prev').trigger('click');
-        expect(callback).toHaveBeenCalledWith(jasmine.any(Object), {
+        expect(navCallback).toHaveBeenCalledWith(jasmine.any(Object), {
           clickedButton: $(".test-prev"),
           currentPage: 1
         });
+      });
+
+      it("should trigger the 'before' callback", function() {
+        $('.test-next').trigger('click');
+        $('.test-prev').trigger('click');
+
+        expect(beforeCallback.callCount).toBe(2);
       });
     });
     describe("navigation buttons with the option target", function(){
@@ -421,6 +432,7 @@ describe("Sliding", function() {
         expect($(container).find('li').length).toBe(45);
         expect($(container).get(0)).beInRange(15,30);
      });
+
       it("should disable navigation buttons", function() {
         $(container).sliding({
           next: '.test-next',
@@ -439,18 +451,25 @@ describe("Sliding", function() {
         expect(slidingInstance.disable).toHaveBeenCalled();
       });
      it("should have a successfull ajax callback", function(){
-       var callback = jasmine.createSpy();
-       $(container).sliding({
+       var nextRemoteCallback = jasmine.createSpy();
+       var beforeAjaxCallback = jasmine.createSpy();
+
+       var x = $(container).sliding({
           next: '.test-next',
           prev: '.test-prev',
           url: 'foo/test',
           items: 15, // one page,
-          nextRemote: callback
+          nextRemote: nextRemoteCallback,
+          beforeAjax: beforeAjaxCallback
         });
+
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('refresh');
         $('.test-next').trigger('click');
-        expect(callback).toHaveBeenCalledWith(jasmine.any(Object), {
+
+        expect(beforeAjaxCallback).toHaveBeenCalled();
+
+        expect(nextRemoteCallback).toHaveBeenCalledWith(jasmine.any(Object), {
           data: newData
         });
      });
@@ -504,6 +523,19 @@ describe("Sliding", function() {
         $(container).sliding('setTotalPages', 3);
         $(container).sliding('goToPage', 2);
         var currentElement = $(container).find('li').eq(16);
+        expect(callback).toHaveBeenCalled();
+     });
+     it("should trigger the 'beforeSlide' callback", function() {
+       var callback = jasmine.createSpy();
+        $(container).sliding({
+          next: '.test-next',
+          prev: '.test-prev',
+          url: 'foo/test2',
+          beforeSlide: callback,
+          items: 15
+        });
+        $(container).sliding('setTotalPages', 3);
+        $(container).sliding('goToPage', 2);
         expect(callback).toHaveBeenCalled();
      });
      it("should call create callback", function(){

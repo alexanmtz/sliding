@@ -274,6 +274,8 @@ $.widget( "ui.sliding", {
      self._trigger('before', {target: self.element});
 
      if (this.options.url && !this.pageCached(page)) {
+       self._trigger('beforeAjax', {target: self.element});
+
        $.ajax({
          context: self,
          url: urlFormat,
@@ -319,6 +321,12 @@ $.widget( "ui.sliding", {
     var self = this;
     var targetElement = $("." + this._getPageClass(page), self.element);
 
+    var triggerEvent = function(evt) {
+      self._trigger(evt, {target: self.element}, {
+        'currentElement' : targetElement
+      });
+    };
+
     var animate = (options == undefined || options.animate == undefined) ? true : options.animate;
     var speed = animate ? self.options.speed : 0;
     var opts = {
@@ -330,17 +338,12 @@ $.widget( "ui.sliding", {
           var targetHeight = Math.ceil(targetElement.length/self.options.columns) * outer;
           self._adjustHeight(targetHeight);
         }
-        self._trigger('finish', {target: self.element}, {
-          'currentElement' : targetElement
-        });
+        triggerEvent('finish');
       }
     }
 
+    triggerEvent('beforeSlide');
     $(this.element).clearQueue('fx').scrollTo(targetElement, speed, opts);
-
-    $(this.element).
-      clearQueue('fx').
-      scrollTo(targetElement, speed, opts);
   },
   getUrlFormat: function() {
     if(!this.options.urlFormat) {
