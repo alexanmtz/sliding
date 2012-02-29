@@ -1,12 +1,5 @@
 beforeEach(function() {
   this.addMatchers({
-    toBePlaying: function(expectedSong) {
-      var player = this.actual;
-      return player.currentlyPlayingSong === expectedSong
-          && player.isPlaying;
-    }
-  });
-  this.addMatchers({
     itemsInsideContainer: function(amount) {
         var isIn = 0;
         var current_width = $(this.actual).width();

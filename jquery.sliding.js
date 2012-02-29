@@ -3,7 +3,7 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno, Túlio Ornelas, Daniel Fernandes and Emerson Macedo (http://blog.alexandremagno.net)
- * @version 1.4
+ * @version 1.6.0
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
@@ -43,6 +43,7 @@ $.widget( "ui.sliding", {
   elementDimensions: 0,
   visited: [],
   ignoreCache: false,
+  groupElements: false,
   pageClassTemplate: "sliding-page",
   pageClass: "sliding-page-",
   pageContainerClass: "sliding-page-container",
@@ -91,6 +92,7 @@ $.widget( "ui.sliding", {
     });
   },
   _slicePages: function() {
+    this.groupElements = true;
     var items = $(this.element).find(this.options.item);
     var item = $(items[0]);
 
@@ -125,11 +127,15 @@ $.widget( "ui.sliding", {
     }
   },
   _removeSlices: function() {
-    $(this.element).
-      find(this.options.item).
-      not("." + this.pageContainerClass).
-      unwrap().
-      unwrap();
+    if (this.isGrouped()) {
+      $(this.element).
+        find(this.options.item).
+        not("." + this.pageContainerClass).
+        unwrap().
+        unwrap();
+    }
+
+    this.groupElements = false;
   },
   _getPageClass: function(index) {
     if (!index) {
@@ -439,6 +445,12 @@ $.widget( "ui.sliding", {
     this._addPaginationClass();
 
     this.enclose();
+  },
+  isGrouped: function() {
+    return this.groupElements;
+  },
+  destroyGroup: function() {
+    this._removeSlices();
   },
   regroup: function() {
     this.updateTotalPages();

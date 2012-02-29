@@ -43,6 +43,10 @@ describe("Sliding", function() {
       $(container).sliding();
     });
 
+    it("should flag the group as disabled", function() {
+      expect($(container).sliding("isGrouped")).toBeFalsy();
+    });
+
     it("should adjust the container size", function() {
       expect( $(container).width() ).toEqual(50);
     });
@@ -681,6 +685,10 @@ describe("Sliding", function() {
       });
     });
 
+    it("should flag the group as enabled", function() {
+      expect($(container).sliding("isGrouped")).toBeTruthy();
+    });
+
     it("should use the parent to wrap the elements", function() {
       expect($("ul li.sliding-page-container", container).length > 0).toBeTruthy();
       expect($("ul li.sliding-page-container", container).length).toEqual(Math.ceil(numberOfElements/6));
@@ -715,6 +723,16 @@ describe("Sliding", function() {
         // considering 15 itens, 2 pages
         expect($(containers[0]).height()).toEqual(outerHeight * 8);
         expect($(containers[1]).height()).toEqual(outerHeight * 7);
+      });
+    });
+
+    describe("the destruction of group", function() {
+      beforeEach(function() {
+        $(container).sliding("destroyGroup");
+      });
+
+      it("should unwrap the elements", function() {
+        expect($("ul li.sliding-page-container", container).length).toBe(0);
       });
     });
 

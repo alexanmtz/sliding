@@ -47,6 +47,8 @@ You can get reference about documentation at [Sliding Github wiki](https://githu
 * Daniel Martins ([@danielfmt](http://www.twitter.com/danielfmt))
 
 ### Version history
+* 1.6.0
+  * In progress
 * 1.5.1
   * Allow to pass a page when restart
 * 1.5
