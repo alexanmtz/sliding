@@ -9,11 +9,6 @@ a:hover {
 	color: #5888AA;
 	text-decoration: none;
 }
-#container {
-	margin: 0 auto;
-	width: 960px;
-}
-
 
 .horizontal-demo {
   overflow: hidden;
@@ -29,14 +24,21 @@ a:hover {
   width: 150px;
 }
 
+.ui-sliding-navigation, .actions-bar {
+  margin: 20px 0;
+}
+
 .ui-sliding-navigation a {
 	display: inline-block;
 	margin: 0 10px;
 	text-decoration: none;
 }
 
-.destroy {
-	float: right;	
+.slide-live-example li {
+  width: 140px;
+  float: left;
+  margin: 0 5px;
+  padding: 3px;
 }
 
 .ui-state-disabled {
@@ -82,7 +84,7 @@ a {
 .description {
 	font-size: 1.2em;
 	margin-bottom: 30px;
-	margin-top: 30px;
+	margin-top: 70px;
 	font-style: italic;
 }
 .download {
