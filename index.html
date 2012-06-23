@@ -207,7 +207,7 @@
             <script type="text/javascript">
               $(function(){
                 
-                $('.custom-init').submit(function(){
+                $('.custom-init').submit(function(e){
                   
                   var items = $('.option-item').val();
                   var autoHeight = $('.option-autoHeight').val();
@@ -219,16 +219,18 @@
                     prev: '.live-previous',
                     items: items,
                     autoHeight: parseInt(autoHeight),
-                    currentPage: parseInt(currentPage),
                     navClicked: function(el, currentPage) {
                       $('.current-page').html(element.sliding('getCurrentPage'));
                     }
                     
                   });
                   $('.current-page').html(element.sliding('getCurrentPage'));
+                  element.sliding('goToPage', parseInt(currentPage));
+                  element.sliding('setTotalPages', Math.floor(18/5));
                   $('.total-pages').html(element.sliding('getTotalPages'));
-                
+                  $(this).find('input:submit').attr('disabled', 'disabled');
                   return false;
+                  
                 });
                 
               });
