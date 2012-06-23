@@ -54,7 +54,8 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#about">About</a></li>
-              <li><a href="#docs">Live docs</a></li>
+              <li><a href="#live-example">Live example</a></li>
+              <li><a href="#docs">Docs</a></li>
               <li><a href="http://www.github.com/alexanmtz/sliding" target="_blank">Github</a></li>
               <li><a href="https://github.com/alexanmtz/sliding/tags" target="_blank">Download</a></li>
             </ul>
@@ -156,9 +157,9 @@
           <div class="footer">
             get the source code on GitHub : <a href="https://github.com/alexanmtz/sliding">alexanmtz/sliding</a>
           </div>
-          <a name="docs"></a>
+          <a name="live-example"></a>
           <div class="page-header">
-            <h2>Docs</h2>
+            <h2>Example</h2>
             <small>A live example. In this page you can initialize the plugin with custom options and see live results by clicking at 'apply sliding'</small>
           </div>
             <form class="well custom-init">
@@ -171,8 +172,8 @@
                 
                 <label for="option-autoHeight">autoHeight</label>
                 <select class="option-autoHeight" name="option-autoHeight">
-                  <option value="1">true</option>
                   <option value="0">false</option>
+                  <option value="1">true</option>
                 </select>
                 <input type="submit" class="btn" value="Apply sliding" />
                 <h4>How to display current pages</h4>
@@ -202,16 +203,19 @@
                 <li><img src="http://placehold.it/140x100"></li>
               </ul>
             </div>
+            <div class="live-pagination">
             <a href="#" class="btn live-previous">Previous</a>
             <a href="#" class="btn live-next">Next</a>
+            </div>
             <script type="text/javascript">
               $(function(){
-                
+                $(this).find('input:submit').removeAttr('disabled');
+                $('.live-pagination').hide();
                 $('.custom-init').submit(function(e){
                   
-                  var items = $('.option-item').val();
+                  var items = $('.option-item').val() || 5;
                   var autoHeight = $('.option-autoHeight').val();
-                  var currentPage = $('.option-currentPage').val();
+                  var currentPage = $('.option-currentPage').val() || 1;
                   
 
                   var element = $('.slide-live-example').sliding({
@@ -226,19 +230,25 @@
                   });
                   $('.current-page').html(element.sliding('getCurrentPage'));
                   element.sliding('goToPage', parseInt(currentPage));
-                  element.sliding('setTotalPages', Math.floor(18/5));
+                  element.sliding('setTotalPages', Math.floor(18/items));
                   $('.total-pages').html(element.sliding('getTotalPages'));
                   $(this).find('input:submit').attr('disabled', 'disabled');
+                  $('.live-pagination').show();
                   return false;
                   
                 });
                 
               });
             </script>
-            
+            <h3>Live example code</h3>
+            <h4>js</h4>
+            <script src="https://gist.github.com/2979283.js?file=sliding_options_example.js"></script>
+            <h4>html</h4>
+            <script src="https://gist.github.com/2979287.js?file=markup_sliding_live_example.html"></script>
           </div>
          </div>
-         <div class="row"> 
+         <a name="docs"></a>
+         <div class="row">
          <h2>Configuration options</h2>
             <table class="table table-striped table-bordered table-condensed">
               <thead>
@@ -291,9 +301,14 @@
                   <td>url</td>
                   <td>null</td>
                   <td>
-                    This activate the remote sliding, specifying a url the content will be loaded via ajax. You can use dinamic pages, like
-                    <code>'testurl/{page}'</code>, where page will be the current page, so the url will call <code>'testurl/2'</code> when second page is calling
+                    This activate the remote sliding, specifying a url the content will be loaded via ajax. 
                   </td>
+                </tr>
+                <tr>
+                  <td>urlFormat</td>
+                  <td>null</td>
+                  <td>You can use dinamic pages, like
+                  <code>'{url}/page/{page}'</code>, where page will be the current page, so the url will call <code>'example/page/2'</code> when second page is calling</td>
                 </tr>
                 <tr>
                   <td>speed</td>
@@ -395,7 +410,11 @@
             </table>
           </div>
       </div> 
-         
+    <hr />
+    <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Designed and built by <a href="https://github.com/danielfm" target="_blank">Daniel Martins</a>, <a href="https://github.com/tulios" target="_blank">Túlio Ornelas</a>, <a href="https://github.com/emerleite" target="_blank">Emerson Macedo</a> and <a href="https://github.com/alexanmtz" target="_blank">Alexandre Magno</a>.</p>
+    </footer>   
     </div> <!-- /container -->
 	</body>
 </html>
