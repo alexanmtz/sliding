@@ -39,7 +39,7 @@ a:hover {
   float: left;
   margin: 0 5px;
   padding: 3px;
-  overflow: hidden;
+  height: 100px;
 }
 
 .ui-state-disabled {

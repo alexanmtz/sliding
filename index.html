@@ -79,6 +79,9 @@
             <li>Download the source code</li>
             <li>in a list of itens, just use $('seletor').sliding();</li>
           </ul>
+          <h2>When should I use</h2>
+          <p>This plugin is a non cycle carousel, used for navigation in a subset of elements, like video set, picture set, news etc.</p>
+          <p>With you wanna a cycle and unique carousel with a built in paralax effect, please check <a href="http://globocom.github.com/destaque/">The destaque plugin</a></p>
           <h2>Basic Usage</h2>
           <h4>Markup</h4>
     <pre class="prettyprint">
@@ -162,12 +165,22 @@
                 <label for="option">Items</label>
                 <input type="text" placeholder="items to display" class="input-medium option-item" name="option-item">
                 
+                <label for="option">Current page</label>
+                <input type="text" placeholder="default is 1" class="input-medium option-currentPage" name="option-currentPage">
+                
+                
                 <label for="option-autoHeight">autoHeight</label>
                 <select class="option-autoHeight" name="option-autoHeight">
                   <option value="1">true</option>
                   <option value="0">false</option>
                 </select>
                 <input type="submit" class="btn" value="Apply sliding" />
+                <h4>How to display current pages</h4>
+                <code>$('.current-page').html(element.sliding('getCurrentPage'));</code>
+                <p><small>Current page: </small><span class="current-page badge">?</span></p>
+                <h4>How to display total pages</h4>
+                <code>$('.current-page').html(element.sliding('getTotalPages'));</code>
+                <p><small>Total Pages: </small><span class="total-pages badge">?</span></p>
             </form> 
             <div class="slide-live-example">
               <ul class="unstyled">
@@ -198,13 +211,22 @@
                   
                   var items = $('.option-item').val();
                   var autoHeight = $('.option-autoHeight').val();
+                  var currentPage = $('.option-currentPage').val();
+                  
 
-                  $('.slide-live-example').sliding({
+                  var element = $('.slide-live-example').sliding({
                     next: '.live-next',
                     prev: '.live-previous',
                     items: items,
-                    autoHeight: Boolean(autoHeight)
+                    autoHeight: parseInt(autoHeight),
+                    currentPage: parseInt(currentPage),
+                    navClicked: function(el, currentPage) {
+                      $('.current-page').html(element.sliding('getCurrentPage'));
+                    }
+                    
                   });
+                  $('.current-page').html(element.sliding('getCurrentPage'));
+                  $('.total-pages').html(element.sliding('getTotalPages'));
                 
                   return false;
                 });
@@ -266,7 +288,10 @@
                 <tr>
                   <td>url</td>
                   <td>null</td>
-                  <td>This activate the remote sliding, specifying a url the content will be loaded via ajax</td>
+                  <td>
+                    This activate the remote sliding, specifying a url the content will be loaded via ajax. You can use dinamic pages, like
+                    <code>'testurl/{page}'</code>, where page will be the current page, so the url will call <code>'testurl/2'</code> when second page is calling
+                  </td>
                 </tr>
                 <tr>
                   <td>speed</td>
@@ -334,7 +359,36 @@
                   <td><code>function(clickedButton, currentPage){}</code></td>
                   <td>When the navigation button is clicked</td>
                 </tr>
-                                
+                <tr>
+                  <td>goToPage</td>
+                  <td><code>$('element').sliding('goToPage', page)</code></td>
+                  <td>Go directly to a page. Useful for build ordered navigation</td>
+                </tr>
+                <tr>
+                  <td>refresh</td>
+                  <td><code>$('element').sliding('refresh')</code></td>
+                  <td>Force a refresh and update navigation itens and update total pages</td>
+                </tr>
+                <tr>
+                  <td>restart</td>
+                  <td><code>$('element').sliding('restart')</code></td>
+                  <td>Restart the navigation, going to the first page</td>
+                </tr>
+                <tr>
+                  <td>setTotalPages</td>
+                  <td><code>$('element').sliding('setTotalPages', pages)</code></td>
+                  <td>When using remote sliding, you can set manually the totalPages that usually came from ajax</td>
+                </tr>
+                <tr>
+                  <td>getTotalPages</td>
+                  <td><code>$('element').sliding('getTotalPages')</code></td>
+                  <td>Get the total pages for display in your interface</td>
+                </tr>
+                <tr>
+                <td>getCurrentPage</td>
+                  <td><code>$('element').sliding('getCurrentPage')</code></td>
+                  <td>return the current page</td>
+                </tr>
               </tbody>
             </table>
           </div>
