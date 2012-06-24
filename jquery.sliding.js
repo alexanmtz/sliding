@@ -62,8 +62,8 @@ $.widget( "ui.sliding", {
     $(this.element).addClass(this.uiClasses);
 
     this._addPaginationClass();
-    this.updateTotalPages();
     this._createNav();
+    this.updateTotalPages();
     this._navHandlers();
 
     if (groupElements) {
