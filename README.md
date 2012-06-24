@@ -12,6 +12,8 @@ You can get reference about documentation at [Sliding Github page docs](http://a
 
 A complete tutorial for examples of use [Creating sliding itens with jQuery Sliding](http://blog.alexandremagno.net/en/2012/06/creating-sliding-itens-with-jquery-sliding/ "A Tutorial from my blog about usage")
 
+Para documentação em português [Criando elementos deslizantes com o jQuery Sliding](blog.alexandremagno.net/2012/06/criando-elementos-deslizantes-com-o-jquery-sliding/ "Um post no blog sobre o uso do jQuery sliding em Português")
+
 ### In a nutshell:
     <script type="text/javascript" src="jquery.sliding.js"></script>
     <script type="text/javascript">
