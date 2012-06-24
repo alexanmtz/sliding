@@ -8,13 +8,16 @@ This plugin is a slide component developed to attempt complex carousels, that ca
 
 You can see examples at [Sliding Github page](http://alexanmtz.github.com/sliding/ "The github page of usage examples")
 
-You can get reference about documentation at [Sliding Github wiki](https://github.com/alexanmtz/sliding/wiki "The github wiki about the documentation")
+You can get reference about documentation at [Sliding Github page docs](http://alexanmtz.github.com/sliding/#docs "The full reference for documentation")
+
+A complete tutorial for examples of use [Creating sliding itens with jQuery Sliding](http://alexanmtz.github.com/sliding/#docs "A Tutorial from my blog about usage")
 
 ### In a nutshell:
     <script type="text/javascript" src="jquery.sliding.js"></script>
     <script type="text/javascript">
       $(function(){
           $("#cool-list").sliding({
+			  items: 5,
               item: "li",
               prev: ".previous",
               next: ".next"
@@ -22,6 +25,27 @@ You can get reference about documentation at [Sliding Github wiki](https://githu
         });
       </script>
 
+### Or event:
+    <script type="text/javascript" src="jquery.sliding.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          
+			  $('element').sliding({
+			    items: 4,
+			    url: url,
+			    urlFormat: '{url}/page/{page}/',
+			    next: nextLink,
+			    prev: prevLink,
+			    disabledClass: 'disabled',
+			    speed: 500,
+			    onAppend: function(data) {
+			       // data is { total_pages: 2, html: 'content' }
+			       return data.html;
+			    }
+			  });
+            });
+
+      </script>
 ### Features
 
 * You can create carousel with simple lists in one line
