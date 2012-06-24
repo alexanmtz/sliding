@@ -25,6 +25,7 @@ $.widget( "ui.sliding", {
     prev: '.ui-sliding-previous-link',
     disabledClass: 'ui-state-disabled',
     url: null,
+    type: "GET",
     speed: 1000,
     easing: 'easeInOutQuad',
     autoHeight: false,
@@ -285,7 +286,7 @@ $.widget( "ui.sliding", {
        $.ajax({
          context: self,
          url: urlFormat,
-         type: "GET",
+         type: this.options.type,
          data: this.options.params,
          success: function(data){
            self.setIgnoreCache(false);
@@ -427,6 +428,7 @@ $.widget( "ui.sliding", {
     if(this.options.url) {
       this._setOverallSize(totalPages*this.options.items);
     }
+    this.refresh();
   },
   updateTotalPages: function() {
     this._removePaginationClass();

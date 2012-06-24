@@ -47,6 +47,9 @@ You can get reference about documentation at [Sliding Github wiki](https://githu
 * Daniel Martins ([@danielfmt](http://www.twitter.com/danielfmt))
 
 ### Version history
+* 1.7.0
+	* When setTotalPages is not needed anymore to manually call refresh, it made it internally
+	* A new option type to set ajax request type, default is GET
 * 1.6.0
   * In progress
 * 1.5.1
