@@ -10,7 +10,7 @@ You can see examples at [Sliding Github page](http://alexanmtz.github.com/slidin
 
 You can get reference about documentation at [Sliding Github page docs](http://alexanmtz.github.com/sliding/#docs "The full reference for documentation")
 
-A complete tutorial for examples of use [Creating sliding itens with jQuery Sliding](http://alexanmtz.github.com/sliding/#docs "A Tutorial from my blog about usage")
+A complete tutorial for examples of use [Creating sliding itens with jQuery Sliding](http://blog.alexandremagno.net/en/2012/06/creating-sliding-itens-with-jquery-sliding/ "A Tutorial from my blog about usage")
 
 ### In a nutshell:
     <script type="text/javascript" src="jquery.sliding.js"></script>
