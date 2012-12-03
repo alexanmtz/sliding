@@ -65,8 +65,8 @@ describe("Sliding", function() {
     it("should adjust the overall size accordingly", function() {
       expect( $("ul", container).width() ).toEqual(300);
     });
-  })
-
+  });
+  
   describe("current page", function() {
     describe("with default value", function() {
       beforeEach(function() {
@@ -336,6 +336,31 @@ describe("Sliding", function() {
          var currentPage = $(container).sliding('getCurrentPage');
          expect(currentPage).toBe(1);
        });
+    });
+   describe("Dealing with navigation and paging", function(){
+      beforeEach(function() {
+        var pager = $('<div class="pager"></div>');
+        pager.insertAfter(container);
+        $(container).sliding({
+          pager: ".pager",
+          pagerActiveClass: "sliding-pager-active",
+          items: 5
+        });
+      });
+      it("should append a list with n itens according with total pages", function(){
+        expect($(".pager li").length).toBe(3);
+      });
+      it("should the first item be one and the last three", function(){
+        expect($(".pager li:first a").text()).toBe("1");
+        expect($(".pager li:last a").text()).toBe("3");
+      });
+      it("should add the active class in first page", function(){
+        expect($(".pager li:eq(0)").hasClass('sliding-pager-active')).toBe(true);
+      });
+      it("should add the active class in current page", function(){
+        $(container).sliding("goToPage", 2);
+        expect($(".pager li:eq(1)").hasClass('sliding-pager-active')).toBe(true);
+      });
     });
     describe("when changing the url", function() {
       beforeEach(function() {

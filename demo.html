@@ -17,7 +17,8 @@
         slidingHorizontal.sliding({
             mode: 'horizontal',
             items: 3,
-            target: '.ui-sliding-navigation'
+            target: '.ui-sliding-navigation',
+            pager: '.pager'
         });
         slidingHorizontal.sliding('restart');
 
@@ -67,6 +68,7 @@
         </ul>
       </div>
       <div class="ui-sliding-navigation"></div>
+      <div class="pager"></div>
       <a href="#" class="destroy">destroy!</a>
     </div>
     <div class="demo horizontal-demo">

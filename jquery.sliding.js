@@ -3,7 +3,7 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno, Túlio Ornelas, Daniel Fernandes and Emerson Macedo (http://blog.alexandremagno.net)
- * @version 1.6.0
+ * @version 1.8
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
@@ -31,6 +31,8 @@ $.widget( "ui.sliding", {
     autoHeight: false,
     params: {},
     currentPage: 1,
+    pager: false,
+    pagerActiveClass: "sliding-pager-active",
     onAppend: function(){}
   },
   navClasses : {
@@ -68,6 +70,10 @@ $.widget( "ui.sliding", {
 
     if (groupElements) {
       this._slicePages();
+    }
+    
+    if(this.options.pager) {
+      this.createPager();
     }
 
     this.refresh();
@@ -324,6 +330,23 @@ $.widget( "ui.sliding", {
        self.makeSlide(page);
      }
   },
+  createPager: function() {
+    $(this.options.pager).append('<ul class="sliding-pager"></ul>');
+    var pages = this._generatePageList();
+    $(this.options.pager).find('ul').append(pages);
+    this.updatePager(this.getCurrentPage());
+  },
+  _generatePageList: function() {
+    var markupList = "";
+    for(var i=1; i <= this.getTotalPages(); i++) {
+      markupList += '<li><a href="#"><span>' + i + '</span></a>';
+    }
+    return markupList;
+  },
+  updatePager: function(page) {
+    console.info(this.getCurrentPage(page));
+    $(this.options.pager).find("ul li").removeClass("sliding-pager-active").filter(':eq(' + (page - 1) + ')').addClass("sliding-pager-active");
+  },
   makeSlide: function(page, options) {
     var self = this;
     var targetElement = $("." + this._getPageClass(page), self.element);
@@ -346,6 +369,7 @@ $.widget( "ui.sliding", {
           self._adjustHeight(targetHeight);
         }
         triggerEvent('finish');
+        self.updatePager(page);
       }
     }
 
