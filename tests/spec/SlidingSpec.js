@@ -340,10 +340,14 @@ describe("Sliding", function() {
    describe("Dealing with navigation and paging", function(){
       beforeEach(function() {
         var pager = $('<div class="pager"></div>');
+        var nav = $('<div id="nav"><a class="test-next" href="#">next</a><a class="test-prev" href="#">prev</a></div>');
+        nav.insertAfter(container);
         pager.insertAfter(container);
         $(container).sliding({
           pager: ".pager",
           pagerActiveClass: "sliding-pager-active",
+          next: '.test-next',
+          prev: '.test-prev',
           items: 5
         });
       });
@@ -360,6 +364,10 @@ describe("Sliding", function() {
       it("should add the active class in current page", function(){
         $(container).sliding("goToPage", 2);
         expect($(".pager li:eq(1)").hasClass('sliding-pager-active')).toBe(true);
+      });
+      it("should go to the desired page when click in navigation buttons", function(){
+        // $(".pager li:eq(1)").trigger('click');
+        //expect($(".pager li:eq(1)").hasClass('sliding-pager-active')).toBe(true);
       });
     });
     describe("when changing the url", function() {

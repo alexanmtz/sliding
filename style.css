@@ -21,6 +21,11 @@ img {
   width: 150px;
 }
 
+.sliding-pager-active a {
+  color: gray;
+  text-decoration: none;
+}
+
 .demo {
   padding: 20px;
   border: 1px solid gray;

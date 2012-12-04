@@ -334,6 +334,7 @@ $.widget( "ui.sliding", {
     $(this.options.pager).append('<ul class="sliding-pager"></ul>');
     var pages = this._generatePageList();
     $(this.options.pager).find('ul').append(pages);
+    this._delegatePagination(".sliding-pager");
     this.updatePager(this.getCurrentPage());
   },
   _generatePageList: function() {
@@ -343,8 +344,15 @@ $.widget( "ui.sliding", {
     }
     return markupList;
   },
+  _delegatePagination: function(target) {
+    var self = this;
+    $(target).delegate("li a", "click",function(e){
+      var page = parseInt($(e.target).text());
+      self.goToPage(page);
+      return false;
+    });
+  },
   updatePager: function(page) {
-    console.info(this.getCurrentPage(page));
     $(this.options.pager).find("ul li").removeClass("sliding-pager-active").filter(':eq(' + (page - 1) + ')').addClass("sliding-pager-active");
   },
   makeSlide: function(page, options) {
@@ -369,7 +377,6 @@ $.widget( "ui.sliding", {
           self._adjustHeight(targetHeight);
         }
         triggerEvent('finish');
-        self.updatePager(page);
       }
     }
 
@@ -412,6 +419,7 @@ $.widget( "ui.sliding", {
   refresh: function() {
     var cur = this.getCurrentPage();
     var totalPages = this.getTotalPages();
+    this.updatePager(cur);
     if(cur == 1) {
       this._unbindPrev();
       this._bindNext();
