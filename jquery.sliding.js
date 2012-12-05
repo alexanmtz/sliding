@@ -3,7 +3,7 @@
  * @name jQuery sliding plugin
  * @namespace jQuery
  * @author Alexandre Magno, Túlio Ornelas, Daniel Fernandes and Emerson Macedo (http://blog.alexandremagno.net)
- * @version 1.8
+ * @version 1.9
  * @description jQuery ui slider horizontal or vertical
  * @requires
  *   jquery.ui.core.js
@@ -331,11 +331,12 @@ $.widget( "ui.sliding", {
      }
   },
   createPager: function() {
+    $('.sliding-pager').remove();
     $(this.options.pager).append('<ul class="sliding-pager"></ul>');
     var pages = this._generatePageList();
     $(this.options.pager).find('ul').append(pages);
+    this.updatePagerIndex(this.getCurrentPage());
     this._delegatePagination(".sliding-pager");
-    this.updatePager(this.getCurrentPage());
   },
   _generatePageList: function() {
     var markupList = "";
@@ -352,7 +353,7 @@ $.widget( "ui.sliding", {
       return false;
     });
   },
-  updatePager: function(page) {
+  updatePagerIndex: function(page) {
     $(this.options.pager).find("ul li").removeClass("sliding-pager-active").filter(':eq(' + (page - 1) + ')').addClass("sliding-pager-active");
   },
   makeSlide: function(page, options) {
@@ -419,7 +420,8 @@ $.widget( "ui.sliding", {
   refresh: function() {
     var cur = this.getCurrentPage();
     var totalPages = this.getTotalPages();
-    this.updatePager(cur);
+    this.createPager();
+    this.updatePagerIndex(cur);
     if(cur == 1) {
       this._unbindPrev();
       this._bindNext();

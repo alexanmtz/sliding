@@ -40,6 +40,7 @@ Para documentação em português [Criando elementos deslizantes com o jQuery Sl
 			    prev: prevLink,
 			    disabledClass: 'disabled',
 			    speed: 500,
+			    pager: ".pager",
 			    onAppend: function(data) {
 			       // data is { total_pages: 2, html: 'content' }
 			       return data.html;
@@ -73,6 +74,8 @@ Para documentação em português [Criando elementos deslizantes com o jQuery Sl
 * Daniel Martins ([@danielfmt](http://www.twitter.com/danielfmt))
 
 ### Version history
+* 1.9
+  * Fixing bugs for numbered pagination
 * 1.8
   * Suport for numbered pagination
 * 1.7.1
