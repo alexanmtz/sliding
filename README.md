@@ -74,6 +74,8 @@ Para documentação em português [Criando elementos deslizantes com o jQuery Sl
 * Daniel Martins ([@danielfmt](http://www.twitter.com/danielfmt))
 
 ### Version history
+* 1.9.1
+  * Fixing bugs for numbered pagination
 * 1.9
   * Fixing bugs for numbered pagination
 * 1.8
