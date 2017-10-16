@@ -15,17 +15,18 @@
 		<script type="text/javascript" src="https://raw.github.com/alexanmtz/sliding/master/jquery.sliding.js"></script>
 		<script type="text/javascript" src="javascripts/main.js"></script>
 		 <script type="text/javascript">
-		    function enable() {
-		      //mode horizontal
-            var slidingHorizontal = $('.sliding-horizontal');
-            slidingHorizontal.sliding({
-                mode: 'horizontal',
-                items: 3,
-                next: '.ui-sliding-navigation .next',
-                prev: '.ui-sliding-navigation .previous'
-            });
-		    }
+		 
 		    $(function(){
+			    function enable() {
+		      //mode horizontal
+			    var slidingHorizontal = $('.sliding-horizontal');
+			    slidingHorizontal.sliding({
+				mode: 'horizontal',
+				items: 3,
+				next: '.ui-sliding-navigation .next',
+				prev: '.ui-sliding-navigation .previous'
+			    });
+		    }
 		        
 		        enable();
 		        
