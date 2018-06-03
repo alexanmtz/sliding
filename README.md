@@ -61,7 +61,7 @@ Para documentação em português [Criando elementos deslizantes com o jQuery Sl
 
 * Firefox 3+ Windows / MAC / Linux
 * IE 7+ Windows
-* A complete test suite using [Jasmine](http://pivotal.github.com/jasmine/ "Jasmine - BDD for your javascript")
+* A complete test suite using [Jasmine](https://jasmine.github.io/ "Jasmine - BDD for your javascript")
 
 ### Dependencies
 * jquery.scrollTo - [Ariel Flesler](http://flesler.blogspot.com/2007/10/jqueryscrollto.html "ScrollTo jQuery plugin")
